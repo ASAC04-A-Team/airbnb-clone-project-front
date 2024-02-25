@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function NavigationBar() {
   const pathname = usePathname();
-  const [pathHightOption, setPathHightOption] = useState("");
+  const [pathHightOption, setPathHightOption] = useState("h-40");
   useEffect(() => {
     if (pathname === "/") {
       setPathHightOption("h-40");
