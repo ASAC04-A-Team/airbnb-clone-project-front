@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import SearchButton from "@/components/searchButton";
 
 export default function HomeNavigation() {
   const pathname = usePathname();
@@ -67,8 +68,9 @@ export default function HomeNavigation() {
               <span className="text-xs pr-[30px]">여행자</span>
               <span className="text-sm mt-1 text-gray-400">게스트 추가</span>
             </div>
-            {/* <div className=" absolute right-3">
-              <button className="flex w-10 h-10 bg-[#FF385C] rounded-full items-center justify-center hover:bg-[#FF999C]">
+            <div className=" absolute right-3">
+              <SearchButton />
+              {/* <button className="flex w-10 h-10 bg-[#FF385C] rounded-full items-center justify-center hover:bg-[#FF999C]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -83,8 +85,8 @@ export default function HomeNavigation() {
                     d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
                   />
                 </svg>
-              </button>
-            </div> */}
+              </button> */}
+            </div>
           </button>
         </div>
       </div>

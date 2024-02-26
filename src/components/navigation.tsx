@@ -14,6 +14,7 @@ export default function NavigationBar() {
       setPathHightOption("h-20");
     }
   }, [pathname]);
+
   return (
     <div
       className={`flex flex-col border border-gray-100 w-full ${pathHightOption}`}
