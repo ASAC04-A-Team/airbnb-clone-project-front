@@ -29,6 +29,7 @@ export default function HomeToolbar({
     if (currentPage < start) setStart((prev) => prev - pageCount);
   }, [currentPage, pageCount, start]);
 
+  // 따로 정리 할것
   const imageName = [
     "최고의 전망",
     "한적한 시골",
