@@ -1,23 +1,14 @@
 "use client";
 import Link from "next/link";
 import HomeNavigation from "@/components/homeNavigation";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function NavigationBar() {
-  const pathname = usePathname();
-  const [pathHightOption, setPathHightOption] = useState("h-40");
-  useEffect(() => {
-    if (pathname === "/") {
-      setPathHightOption("h-40");
-    } else {
-      setPathHightOption("h-20");
-    }
-  }, [pathname]);
-
+export default function NavigationBar({ main }: { main: boolean }) {
   return (
     <div
-      className={`flex flex-col border border-gray-100 w-full ${pathHightOption}`}
+      className={`flex flex-col border border-gray-100 w-full ${
+        main ? "h-40" : "h-20"
+      }`}
     >
       <div className="flex w-full h-20  justify-center items-center relative">
         {/* div 3객 묶는 구역 */}
@@ -41,7 +32,7 @@ export default function NavigationBar() {
 
         <div className="min-h-20 max-h-40  px-19 grow flex  justify-center items-center absolute translate(-50%, -50%)">
           <div className=" flex flex-col min-h-20 max-h-40 p-8">
-            <HomeNavigation />
+            <HomeNavigation main={main} />
           </div>
         </div>
 

@@ -1,8 +1,4 @@
-export default function SearchButton({
-  setIsHovered,
-}: {
-  setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function SearchButton() {
   const handleClick = () => {
     alert("Div was clicked!");
   };
@@ -10,8 +6,6 @@ export default function SearchButton({
     <div
       className="flex w-10 h-10 bg-[#FF385C] rounded-full items-center justify-center hover:bg-[#FF999C]"
       onClick={handleClick}
-      onMouseEnter={() => setIsHovered(false)}
-      onMouseLeave={() => setIsHovered(true)}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

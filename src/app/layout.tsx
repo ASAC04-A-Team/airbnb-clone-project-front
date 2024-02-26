@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/navigation";
+import { headers } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,14 +14,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // TODO : Server-side 에서 pathname 알수있는 함수로, 중앙로직화
+  const headersList = headers();
+  // read the custom x-url header
+  const domain = headersList.get("host") || "";
+  const fullUrl = headersList.get("referer") || "";
+  const pathname = fullUrl.substring(
+    fullUrl.search(domain) + domain.length,
+    fullUrl.length
+  );
+  console.log(" * fullUrl minus domain = pathname : ", pathname);
+  const ismain =
+    pathname === "/"; /* FIXME: / 이후 ? 파라미터 들어가는 경우도 커버할 것 */
   return (
     <html lang="en">
       <body className={inter.className} style={{ backgroundColor: "white" }}>
-        <NavigationBar />
-
+        <NavigationBar main={ismain} />
         {children}
       </body>
     </html>

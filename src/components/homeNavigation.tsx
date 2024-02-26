@@ -1,25 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import SearchButton from "@/components/searchButton";
 
-export default function HomeNavigation() {
-  const pathname = usePathname();
-  const [isHovered, setIsHovered] = useState(false);
-
-  const [pathHiddenOption, setPathHiddenOption] = useState("");
-
-  useEffect(() => {
-    if (pathname === "/") {
-      setPathHiddenOption("");
-    } else {
-      setPathHiddenOption("hidden");
-    }
-  }, [pathname]);
-
+export default function HomeNavigation({ main }: { main: boolean }) {
   return (
-    <div className={`${pathHiddenOption} flex flex-col h-40 mt-3`}>
+    <div className={`${main ? "" : "hidden"} flex flex-col h-40 mt-3`}>
       <div
         className="flex flex-row h-20 justify-center items-center"
         role="group"
@@ -64,19 +49,16 @@ export default function HomeNavigation() {
             <span className="text-sm mt-1 text-gray-400">날짜 추가</span>
           </button>
           <span className="text-lg text-gray-300">|</span>
+          {/* h-13 */}
           <button
-            className={`flex flex-row h-13 w-80 rounded-full pl-4 pt-3 pb-3 relative ${
-              isHovered ? "bg-gray-100" : ""
-            } `}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            className={`flex flex-row h-[62px] w-80 rounded-full pl-4 pt-3 pb-3 relative hover:bg-gray-100 has-[:hover]:bg-white`}
           >
             <div className="flex flex-col">
               <span className="text-xs pr-[30px]">여행자</span>
               <span className="text-sm mt-1 text-gray-400">게스트 추가</span>
             </div>
             <div className=" absolute right-3">
-              <SearchButton setIsHovered={setIsHovered} />
+              <SearchButton />
             </div>
           </button>
         </div>
