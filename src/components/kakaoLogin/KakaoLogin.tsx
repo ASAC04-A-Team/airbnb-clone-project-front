@@ -1,7 +1,7 @@
 import { getToken } from "@/components/kakaoLogin/getToken";
 import { useEffect } from "react";
 
-const client_id = "406e4c9eea71feb057081ccb69949514";
+const client_id = "52626340110bfd848ce334e510962338";
 const redirect_uri = "http://localhost:3000/kakaoLogin";
 const response_type = "code";
 
