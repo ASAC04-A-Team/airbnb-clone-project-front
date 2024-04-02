@@ -6,8 +6,8 @@ import RightButtonIcon from '/public/images/RightButtonIcon.svg'
 
 interface Props {
   categoryList: {
-    id: number
-    image: string
+    categoryId: number
+    imageUrl: string
     name: string
   }[]
 }
@@ -18,9 +18,9 @@ export default function HorizonScroll({ categoryList }: Props) {
 
   const listmap = categoryList.map((listIndex) => (
     <ScrollCardView
-      key={listIndex.id}
-      iconId={listIndex.id}
-      iconPath={listIndex.image}
+      key={listIndex.categoryId}
+      iconId={listIndex.categoryId}
+      iconPath={listIndex.imageUrl}
       iconName={listIndex.name}
       selectedIconId={selectedIconId}
       onSelectIcon={setSelectedIconId}
