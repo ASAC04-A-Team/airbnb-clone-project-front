@@ -11,8 +11,6 @@ interface Host {
 }
 
 export default function RoomHost({ host }: { host: Host }) {
-  // console.log(host.profileImageUrl)
-  console.log(host.career)
   return (
     <>
       <div>

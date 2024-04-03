@@ -3,6 +3,7 @@ import ScrollCardView from '@/components/categroyScroll/scrollCardView'
 import React, { useEffect, useRef, useState } from 'react'
 import LeftButtonIcon from '/public/images/LeftButtonIcon.svg'
 import RightButtonIcon from '/public/images/RightButtonIcon.svg'
+import { usePathname } from 'next/navigation'
 
 interface Props {
   categoryList: {
@@ -13,8 +14,20 @@ interface Props {
 }
 export default function HorizonScroll({ categoryList }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [scrollPosition, SetScrollPosition] = useState(0)
-  const [selectedIconId, setSelectedIconId] = useState(0)
+  const [scrollPosition, setScrollPosition] = useState(0)
+  const [selectedIconId, setSelectedIconId] = useState(1)
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === '/') {
+      setSelectedIconId(1)
+      if (scrollRef.current!) {
+        scrollRef.current.scrollLeft = 0
+        setScrollPosition(0)
+      }
+    }
+  }, [pathname])
 
   const listmap = categoryList.map((listIndex) => (
     <ScrollCardView
@@ -40,17 +53,17 @@ export default function HorizonScroll({ categoryList }: Props) {
           scrollRef.current.offsetWidth * 0.7 &&
         plusMinus === 0
       ) {
-        SetScrollPosition(0)
+        setScrollPosition(0)
         scrollRef.current.scrollLeft = 0
       } else if (
         scrollRef.current.scrollLeft + scrollRef.current.offsetWidth * 0.8 >
           scrollRef.current.scrollWidth - scrollRef.current.offsetWidth * 1.1 &&
         plusMinus === 1
       ) {
-        SetScrollPosition(1)
+        setScrollPosition(1)
         scrollRef.current.scrollLeft = scrollRef.current.scrollWidth - scrollRef.current.offsetWidth
       } else {
-        SetScrollPosition(2)
+        setScrollPosition(2)
       }
     }
   }

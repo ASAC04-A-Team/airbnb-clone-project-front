@@ -19,19 +19,16 @@ interface KakaoLoginProps {
 
 export default function KakaoLogin({ KakaoLocation }: KakaoLoginProps) {
   useEffect(() => {
-    console.log('Reloaded')
-    console.log('1')
     const search = new URLSearchParams(window.location.search) //인가 코드 요청시 redirect로 받는 값 http://localhost:3000/login?code= 인가 코드 (매번 바뀌는 값임)
-    console.log('1-2')
+
     const code = search.get('code') // code부분인 인가 코드 추츨
-    console.log('1-3')
+
     const accessToken = localStorage.getItem('access_token')
 
-    console.log('2')
     //카카오로부터 redirect 당한 경우 code가 들어있을 것이다!
     if (code && (!accessToken || accessToken === 'undefined')) {
       //post로 aouth/token 토큰 요청하는 부분
-      console.log('2-2')
+
       handleGetToken()
     }
   }, []) //최초 진입시 발동 (1.실제 최초인 경우 2. 카카오로부터 redirect 당해서 진입한 경우)
