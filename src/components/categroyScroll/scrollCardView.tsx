@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import Link from 'next/link'
 
 type NewType = {
   iconId: number
@@ -16,12 +17,13 @@ export default function ScrollCardView({
   selectedIconId,
   onSelectIcon,
 }: NewType) {
-  const isSelected = iconId === selectedIconId
-
   return (
-    <div
+    <Link
+      href={`/${iconId}`}
       className={`flex h-full items-center justify-center bg-white border-b-2 group ${
-        isSelected ? 'border-black hover:border-black ' : 'border-white hover:border-gray-200'
+        selectedIconId === iconId && selectedIconId !== 0
+          ? 'border-black hover:border-black '
+          : 'border-white hover:border-gray-200'
       } `}
       onClick={() => onSelectIcon(iconId)}
     >
@@ -29,11 +31,11 @@ export default function ScrollCardView({
         <Image src={iconPath} width={24} height={24} alt='Icon' />
 
         <span
-          className={`text-xs text-nowrap group-hover:text-black ${isSelected ? 'text-black' : 'text-mainGray'} `}
+          className={`text-xs text-nowrap group-hover:text-black ${selectedIconId === iconId && selectedIconId !== 0 ? 'text-black' : 'text-mainGray'} `}
         >
           {iconName}
         </span>
       </div>
-    </div>
+    </Link>
   )
 }

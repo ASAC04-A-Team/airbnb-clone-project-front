@@ -1,13 +1,12 @@
-import Headers from '@/app/(home)/header'
+import ScrollPage from '@/components/categroyScroll/scrollPage'
 import ItemCardPage from '@/components/itemCardView/itemCardPage'
+import SmNavibar from '@/components/navigation/navibarComponents/smNavibar'
+import NavigationBar from '@/components/navigation/navigation'
 
 export default async function HomePage() {
   return (
     <>
-      <main className='flex flex-col items-center justify-center w-full h-full'>
-        <Headers />
-        <ItemCardPage />
-      </main>
+      <ItemCardPage />
     </>
   )
 }
