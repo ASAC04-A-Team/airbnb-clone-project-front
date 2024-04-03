@@ -24,7 +24,6 @@ export default function HorizonScroll({ categoryList }: Props) {
       setSelectedIconId(1)
       if (scrollRef.current!) {
         scrollRef.current.scrollLeft = 0
-        console.log('스크롤 이동' + scrollRef.current.scrollLeft)
         setScrollPosition(0)
       }
     }
