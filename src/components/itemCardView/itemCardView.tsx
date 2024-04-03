@@ -21,7 +21,6 @@ export default function ItemCardView({
   address,
   nation,
 }: Props) {
-  console.log(nation + 'nation')
   return (
     <div className='max-w-[486px] min-w-[87px]   h-auto flex flex-col items-center justify-center space-y-2'>
       <div className='w-full h-auto m-auto rounded-lg relative'>

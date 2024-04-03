@@ -1,5 +1,4 @@
 export default async function RoomTitle({ roomName }: { roomName: string }) {
-  console.log(roomName)
   return (
     <>
       <div>

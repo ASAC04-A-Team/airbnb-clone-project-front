@@ -27,8 +27,8 @@ interface Room {
 }
 
 interface roomAdvantage {
-  name: String
-  imageUrl: String
+  name: string
+  imageUrl: string
   description: string
 }
 
@@ -37,14 +37,23 @@ interface RoomComfort {
   imageUrl: string
 }
 
+interface roomHost {
+  hostName: string
+  hostProfileImageUrl: string
+  grade: boolean
+  hostCareer: number
+}
+
 export default function ReservationScreen({
   roomData,
   roomComfort,
   roomAdvantage,
+  roomHost,
 }: {
   roomData: Room
   roomComfort: RoomComfort[]
   roomAdvantage: roomAdvantage[]
+  roomHost: roomHost
 }) {
   return (
     <>
@@ -60,7 +69,7 @@ export default function ReservationScreen({
                 bathroomCount={roomData.bathroomCount}
               />
               <hr />
-              {/* <RoomHost host={roomData.hostName} /> */}
+              <RoomHost host={roomHost} />
               <hr />
               <RoomAdvantage advantages={roomAdvantage} />
               <hr />

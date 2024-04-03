@@ -13,6 +13,18 @@ interface IdParams {
 // room comfort : http://localhost:8080/api/room/roomComfort/{roomId}
 // rom advantage : http://localhost:8080/api/room/roomAdvantage/{roomId}
 
+async function fetchRoomHostData(id: number) {
+  try {
+    const result = await fetch(` http://localhost:8080/api/room/roomHost/${id}`)
+    const roomHostData = await result.json()
+
+    return roomHostData
+  } catch (error) {
+    console.error('편의시설이 없습니다.', error)
+    return []
+  }
+}
+
 async function fetchRoomComfortData(id: number) {
   try {
     const result = await fetch(` http://localhost:8080/api/room/roomComfort/${id}`)
@@ -29,7 +41,7 @@ async function fetchRoomAdvantageData(id: number) {
   try {
     const result = await fetch(` http://localhost:8080/api/room/roomAdvantage/${id}`)
     const roomAdvantageData = await result.json()
-    console.log(roomAdvantageData)
+
     return roomAdvantageData
   } catch (error) {
     console.error('편의시설이 없습니다.', error)
@@ -55,6 +67,7 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
   const reviewsData = await fetchReviewsData(id)
   const roomComfort = await fetchRoomComfortData(id)
   const roomAdvantage = await fetchRoomAdvantageData(id)
+  const roomHost = await fetchRoomHostData(id)
 
   if (!roomData) {
     return <div>존재하지 않는 방입니다.</div>
@@ -81,6 +94,7 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
               roomData={roomData}
               roomComfort={roomComfort}
               roomAdvantage={roomAdvantage}
+              roomHost={roomHost}
             />
           </Screen>
           <Screen>
