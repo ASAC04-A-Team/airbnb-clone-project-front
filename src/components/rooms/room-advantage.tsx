@@ -1,25 +1,26 @@
 import Image from 'next/image'
 
 interface Advantage {
-  name: string
-  image: string
+  name: String
+  imageUrl: String
+  description: string
 }
 
 export default function RoomAdvantage({ advantages }: { advantages: Advantage[] }) {
-  const advantageList = advantages
+  console.log(advantages)
 
   return (
     <>
-      <div>
+      {/* <div>
         <div className='py-6'>
           <div className='flex flex-col justify-between space-y-6'>
-            {advantageList.map((eachAdvantage, index) => (
+            {advantages.map((eachAdvantage, index) => (
               <section key={index} className='flex items-center'>
                 <div className='flex flex-start items-center'>
                   <div className='w-10 h-10 mr-6'>
                     <div className='relative w-full h-full'>
                       <Image
-                        src={eachAdvantage.image}
+                        src={eachAdvantage.imageUrl}
                         alt={'advantages image'}
                         fill
                         className='object-contain rounded-full'
@@ -35,7 +36,7 @@ export default function RoomAdvantage({ advantages }: { advantages: Advantage[] 
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

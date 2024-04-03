@@ -12,7 +12,30 @@ interface IdParams {
 // room data :  http://localhost:8080/api/room/roomDetail/{roomId}
 // room comfort : http://localhost:8080/api/room/roomComfort/{roomId}
 // rom advantage : http://localhost:8080/api/room/roomAdvantage/{roomId}
-// review : http://localhost:8080/api/review/{roomId}
+
+async function fetchRoomComfortData(id: number) {
+  try {
+    const result = await fetch(` http://localhost:8080/api/room/roomComfort/${id}`)
+    const roomComfortData = await result.json()
+
+    return roomComfortData
+  } catch (error) {
+    console.error('편의시설이 없습니다.', error)
+    return []
+  }
+}
+
+async function fetchRoomAdvantageData(id: number) {
+  try {
+    const result = await fetch(` http://localhost:8080/api/room/roomAdvantage/${id}`)
+    const roomAdvantageData = await result.json()
+    console.log(roomAdvantageData)
+    return roomAdvantageData
+  } catch (error) {
+    console.error('편의시설이 없습니다.', error)
+    return []
+  }
+}
 
 async function fetchReviewsData(id: number) {
   try {
@@ -26,11 +49,12 @@ async function fetchReviewsData(id: number) {
 }
 
 export default async function RoomDetailPage({ params: { id } }: IdParams) {
-  const result = await fetch(`http://localhost:3000/api/room/${id}`)
-  const inner = await result.json()
-  const roomData = inner.data
+  const result = await fetch(`http://localhost:8080/api/room/roomDetail/${id}`)
+  const roomData = await result.json()
 
   const reviewsData = await fetchReviewsData(id)
+  const roomComfort = await fetchRoomComfortData(id)
+  const roomAdvantage = await fetchRoomAdvantageData(id)
 
   if (!roomData) {
     return <div>존재하지 않는 방입니다.</div>
@@ -47,13 +71,17 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
       <main>
         <div className='flex flex-col'>
           <Screen>
-            <RoomTitle roomName={roomData.name} />
+            <RoomTitle roomName={roomData.roomName} />
           </Screen>
           <Screen>
-            <RoomAlbum images={roomData.images} />
+            <RoomAlbum images={roomData.roomImageUrls} />
           </Screen>
           <Screen>
-            <ReservationScreen roomData={roomData} />
+            <ReservationScreen
+              roomData={roomData}
+              roomComfort={roomComfort}
+              roomAdvantage={roomAdvantage}
+            />
           </Screen>
           <Screen>
             <RoomReview reviews={reviewsData} />

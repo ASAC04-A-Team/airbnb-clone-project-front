@@ -8,52 +8,44 @@ import RoomIntroduction from '@/components/rooms/room-introduction'
 import RoomTitle from '@/components/rooms/room-title'
 import Screen from '@/components/rooms/screen'
 
-interface Host {
-  name: string
-  profileImageUrl: string
-  career: string
-  isSuperHost: boolean
-  isAuth: boolean
-  responseRate: number
-  responseTime: string
-}
-
-interface RoomDetail {
+interface Room {
+  roomId: number
+  RoomName: string
+  roomImageUrls: string[]
+  nation: string
+  address: string
+  bathroomCount: number
   bedroomCount: number
   bedCount: number
-  bathroomCount: number
-}
-
-interface Advantage {
-  name: string
-  image: string
-}
-
-interface Comfort {
-  name: string
-  image: string
-}
-
-interface Room {
-  id: number
-  images: string[]
-  name: string
+  capacity: number
+  reviewCount: number
+  hostName: String
   introduction: string
-  address: string
-  nation: string
-  description: string[]
-  host: Host
   price: string
-  roomDetail: RoomDetail
+  description: string
   guestPreference: boolean
-  guestCapacity: number
-  advantages: Advantage[]
-  comforts: Comfort[]
-  checkIn: string
-  checkOut: string
 }
 
-export default function ReservationScreen({ roomData }: { roomData: Room }) {
+interface roomAdvantage {
+  name: String
+  imageUrl: String
+  description: string
+}
+
+interface RoomComfort {
+  name: string
+  imageUrl: string
+}
+
+export default function ReservationScreen({
+  roomData,
+  roomComfort,
+  roomAdvantage,
+}: {
+  roomData: Room
+  roomComfort: RoomComfort[]
+  roomAdvantage: roomAdvantage[]
+}) {
   return (
     <>
       <div className='md:h-[1030px] lg:h-[1030px] md:w-[800px] lg:w-[1250px]'>
@@ -62,17 +54,19 @@ export default function ReservationScreen({ roomData }: { roomData: Room }) {
             <div className='w-full'>
               <RoomIntroduction
                 introduction={roomData.introduction}
-                guestCapacity={roomData.guestCapacity}
-                roomDetail={roomData.roomDetail}
+                guestCapacity={roomData.capacity}
+                bedCount={roomData.bedCount}
+                bedroomCount={roomData.bedroomCount}
+                bathroomCount={roomData.bathroomCount}
               />
               <hr />
-              <RoomHost host={roomData.host} />
+              {/* <RoomHost host={roomData.hostName} /> */}
               <hr />
-              <RoomAdvantage advantages={roomData.advantages} />
+              <RoomAdvantage advantages={roomAdvantage} />
               <hr />
               <RoomDescription />
               <hr />
-              <RoomComport comforts={roomData.comforts}/>
+              <RoomComport roomComfort={roomComfort} />
               <hr />
             </div>
           </div>

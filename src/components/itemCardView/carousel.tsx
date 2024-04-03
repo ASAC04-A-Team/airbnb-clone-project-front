@@ -6,22 +6,22 @@ import Like from '/public/images/like.svg'
 import Link from 'next/link'
 
 interface Props {
-  slides: Array<string>
+  roomImageUrls: Array<string>
   id: number
   guestPreference: boolean
 }
 
-export default function Carousel({ slides, id, guestPreference }: Props) {
+export default function Carousel({ roomImageUrls, id, guestPreference }: Props) {
   const [current, setCurrent] = useState(0)
   const [heart, setHeart] = useState(false)
 
   const previousSlide = () => {
-    if (current === 0) setCurrent(slides.length - 1)
+    if (current === 0) setCurrent(roomImageUrls.length - 1)
     else setCurrent(current - 1)
   }
 
   const nextSlide = () => {
-    if (current === slides.length - 1) setCurrent(0)
+    if (current === roomImageUrls.length - 1) setCurrent(0)
     else setCurrent(current + 1)
   }
   const handleHeart = () => {
@@ -36,7 +36,7 @@ export default function Carousel({ slides, id, guestPreference }: Props) {
           transform: `translateX(-${current * 100}%)`,
         }}
       >
-        {slides.map((path, index) => {
+        {roomImageUrls.map((path, index) => {
           return (
             <img key={index} src={path} alt='' className='w-full h-auto rounded-lg object-cover' />
           )
@@ -61,14 +61,14 @@ export default function Carousel({ slides, id, guestPreference }: Props) {
         <LeftButtonIcon className='group-hover:text-black text-transparent' />
       </button>
       <button
-        className={`absolute top-1/2 right-3 p-2 rounded-full bg-transparent group-hover:bg-transparent-70 ${current === slides.length - 1 ? 'hidden' : ''}`}
+        className={`absolute top-1/2 right-3 p-2 rounded-full bg-transparent group-hover:bg-transparent-70 ${current === roomImageUrls.length - 1 ? 'hidden' : ''}`}
         onClick={nextSlide}
       >
         <RightButtonIcon className='group-hover:text-black text-transparent' />
       </button>
 
       <div className='absolute bottom-0 py-1 flex justify-center items-center gap-1 w-full'>
-        {slides.slice(Math.max(0, current - 2), current + 3).map((s, i) => {
+        {roomImageUrls.slice(Math.max(0, current - 2), current + 3).map((s, i) => {
           const index = i + Math.max(0, current - 2)
           return (
             <div
