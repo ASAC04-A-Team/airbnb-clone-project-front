@@ -6,8 +6,15 @@ interface RoomComfort {
   imageUrl: string
 }
 
-export default function RoomComport({ roomComfort }: { roomComfort: RoomComfort[] }) {
+export default async function RoomComport({ id }: { id: string }) {
+  const result = await fetch(` http://localhost:8080/api/room/roomComfort/${id}`)
+  const inner = await result.json()
+  const roomComfort = inner
+
   const comfortExist = roomComfort.length > 0
+  if (!comfortExist) {
+    return <div>편의시설이 존재하지 않는 방 입니다.</div>
+  }
   return (
     <>
       <div>
@@ -16,7 +23,7 @@ export default function RoomComport({ roomComfort }: { roomComfort: RoomComfort[
             <div className='pt-6 text-[22px] font-semibold'>숙소 편의시설</div>
             <div className='flex flex-wrap'>
               {comfortExist ? (
-                roomComfort.map((eachComfort, index) => (
+                roomComfort.map((eachComfort: RoomComfort, index: number) => (
                   <section key={index} className='flex items-center w-1/2'>
                     <div className='relative flex px-2 w-[265px] pb-4'>
                       <div className='w-6 h-6 mr-4'>
