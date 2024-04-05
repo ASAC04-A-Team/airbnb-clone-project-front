@@ -1,16 +1,14 @@
 import Image from 'next/image'
 
-interface Host {
-  name: string
-  profileImageUrl: string
-  career: string
-  isSuperHost: boolean
-  isAuth: boolean
-  responseRate: number
-  responseTime: string
-}
+export default async function RoomHost({ id }: { id: string }) {
+  const result = await fetch(` http://localhost:8080/api/room/roomHost/${id}`)
+  const inner = await result.json()
+  const host = inner
 
-export default function RoomHost({ host }: { host: Host }) {
+  if (result.status === 500) {
+    return <div>host가 없습니다.</div>
+  }
+
   return (
     <>
       <div>
@@ -20,7 +18,7 @@ export default function RoomHost({ host }: { host: Host }) {
               <div className='w-10 h-10 mr-6'>
                 <button className='relative w-full h-full'>
                   <Image
-                    src={host.profileImageUrl}
+                    src={host.hostProfileImageUrl}
                     alt={'host profile image'}
                     fill
                     className='object-contain rounded-full'
@@ -29,9 +27,11 @@ export default function RoomHost({ host }: { host: Host }) {
               </div>
               <div className='flex flex-col justify-between space-y-1'>
                 <div className='text-[16px] font-semibold'>
-                  {host.isSuperHost ? `슈퍼 호스트 - 호스트: ${host.name}` : `호스트: ${host.name}`}
+                  {host.grade
+                    ? `슈퍼 호스트 - 호스트: ${host.hostName}`
+                    : `호스트: ${host.hostName}`}
                 </div>
-                <div className='text-[14px] text-mainGray'>{`호스팅 경력 ${host.career}`}</div>
+                <div className='text-[14px] text-mainGray'>{`호스팅 경력 ${host.hostCareer}`}</div>
               </div>
             </div>
           </section>

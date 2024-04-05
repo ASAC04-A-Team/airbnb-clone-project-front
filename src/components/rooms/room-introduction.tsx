@@ -1,4 +1,6 @@
-interface RoomDetail {
+interface Props {
+  introduction: string
+  guestCapacity: number
   bedroomCount: number
   bedCount: number
   bathroomCount: number
@@ -7,12 +9,10 @@ interface RoomDetail {
 export default function RoomIntroduction({
   introduction,
   guestCapacity,
-  roomDetail,
-}: {
-  introduction: string
-  guestCapacity: number
-  roomDetail: RoomDetail
-}) {
+  bedCount,
+  bedroomCount,
+  bathroomCount,
+}: Props) {
   return (
     <>
       <div>
@@ -24,9 +24,9 @@ export default function RoomIntroduction({
               </div>
               <div className='flex flex-row pt-1'>
                 <span className='text-gray-900 text-base'>
-                  {roomDetail.bedCount > 0
-                    ? `최대 인원${guestCapacity}명, 침대 ${roomDetail.bedCount}개, 욕실 ${roomDetail.bathroomCount}개`
-                    : `최대 인원${guestCapacity}명, 침실 ${roomDetail.bedroomCount}개, 욕실 ${roomDetail.bathroomCount}개`}
+                  {bedCount > 0
+                    ? `최대 인원${guestCapacity}명, 침대 ${bedCount}개, 욕실 ${bathroomCount}개`
+                    : `최대 인원${guestCapacity}명, 침실 ${bedroomCount}개, 욕실 ${bathroomCount}개`}
                 </span>
               </div>
               <div className='flex flex-row pt-2'>
