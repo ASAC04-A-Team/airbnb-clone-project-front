@@ -50,7 +50,6 @@ export default function ReservationScreen({ roomData, id }: { roomData: Room; id
           </div>
           <div className='flex w-2/5'>
             <div className='ml-auto mr-0'>
-              s
               <ReservationCard price={roomData.price} />
             </div>
           </div>
