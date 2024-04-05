@@ -49,6 +49,13 @@ export default function RoomReview({ reviews }: { reviews: Review[] }) {
     setExpanded((expended) => false)
   }
 
+  const [reviewModalOpen, setReviewModalOpen] = useState(false)
+
+  const handleOpen = () => {
+    setReviewModalOpen(!reviewModalOpen)
+    console.log(reviewModalOpen)
+  }
+
   return (
     <>
       <div className='py-12'>
@@ -118,7 +125,19 @@ export default function RoomReview({ reviews }: { reviews: Review[] }) {
               )}
             </div>
             <div className='mt-3'>
-              <ReviewModal reviews={reviews} />
+              <button
+                onClick={handleOpen}
+                className=' px-[23px] py-[13px] bg-white border-[1px] border-mainBlack rounded-lg'
+              >
+                <span className='text-mainBlack text-base font-semibold'>
+                  {`리뷰 ${reviews.length}개 모두 보기`}
+                </span>
+              </button>
+              <ReviewModal
+                reviews={reviews}
+                reviewModalOpen={reviewModalOpen}
+                setReviewModalOpen={setReviewModalOpen}
+              />
             </div>
           </div>
         </div>

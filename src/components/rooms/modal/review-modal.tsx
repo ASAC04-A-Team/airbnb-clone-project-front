@@ -42,15 +42,21 @@ const getAvgScore = (reviews: Review[]): number => {
   return Math.round(avgScore * 10) / 10
 }
 
-export default function ReviewModal({ reviews }: { reviews: Review[] }) {
-  const [open, setOpen] = useState(false)
-
+export default function ReviewModal({
+  reviews,
+  reviewModalOpen,
+  setReviewModalOpen,
+}: {
+  reviews: Review[]
+  reviewModalOpen: boolean
+  setReviewModalOpen: (newValue: boolean) => void
+}) {
   const handleOpen = () => {
-    setOpen(true)
+    setReviewModalOpen(true)
   }
 
   const handleClose = () => {
-    setOpen(false)
+    setReviewModalOpen(false)
   }
 
   const [selectedMenu, setSelectedMenu] = useState('최신순')
@@ -65,27 +71,25 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
 
   return (
     <>
-      <button
-        onClick={handleOpen}
-        className=' px-[23px] py-[13px] bg-white border-[1px] border-mainBlack rounded-lg'
-      >
-        <span className='text-mainBlack text-base font-semibold'>
-          {`리뷰 ${reviews.length}개 모두 보기`}
-        </span>
-      </button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={reviewModalOpen} onClose={handleClose}>
         <Box
-          className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl
-           bg-white border-2 border-black shadow-lg p-8 w-[1200px] h-[780px]'
+          className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+           bg-white border-1 border-black shadow-lg
+           md:w-[90%] md:h-[900px] md:mx-3 md:rounded-2xl
+           lg:w-[1032px] lg:h-[900px]
+           w-full h-full '
         >
-          <div>
-            <header>
-              <button className='border-none text-black -p-12' onClick={handleClose}>
-                <CloseIcon />
-              </button>
-            </header>
+          {/* 닫는 버튼  */}
+          <div className='w-full h-[72px] flex items-center relative'>
+            <button className='text-black absolute left-7' onClick={handleClose}>
+              <CloseIcon />
+            </button>
           </div>
+
+          {/* 리뷰 및 별점 전체로 묶은 곳 */}
+          {/* lg 이전에는 가로로 xl 이후로는 세로로  구역 두개로 묶어서 처리*/}
           <div className='max-h-[600px] w-[1150px] overflow-y-auto overflow-x-hidden ml-2 mt-8'>
+            {/* 별점 및 점수 처리 */}
             <div>
               {reviews.length > 2 ? (
                 <div className='flex'>
@@ -178,6 +182,7 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
               <div></div>
             </div>
 
+            {/* 리뷰 나오는 곳 */}
             <div>
               <div className='relative top-8 text-2xl font-semibold'>{`후기 ${reviews.length}개`}</div>
               <div className='flex justify-end'>
