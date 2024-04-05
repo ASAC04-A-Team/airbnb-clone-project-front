@@ -23,7 +23,20 @@ interface Room {
   guestPreference: boolean
 }
 
-export default function ReservationScreen({ roomData, id }: { roomData: Room; id: string }) {
+interface ReviewTotalCount {
+  reviewsCount: number
+  reviewsAvg: number
+}
+
+export default async function ReservationScreen({ roomData, id }: { roomData: Room; id: string }) {
+  const result = await fetch(`http://localhost:8080/api/review/reviewsStatistic/${id}`)
+  const inner = await result.json()
+  const roomReviewTotal: ReviewTotalCount = inner
+
+  if (result.status === 500 || result.status === 404) {
+    roomReviewTotal.reviewsAvg = 50
+    roomReviewTotal.reviewsCount = 0
+  }
   return (
     <>
       <div className='md:h-[1030px] lg:h-[1030px] md:w-[800px] lg:w-[1250px]'>
@@ -36,6 +49,7 @@ export default function ReservationScreen({ roomData, id }: { roomData: Room; id
                 bedCount={roomData.bedCount}
                 bedroomCount={roomData.bedroomCount}
                 bathroomCount={roomData.bathroomCount}
+                roomReviewTotal={roomReviewTotal}
               />
               <hr />
               <RoomHost id={id} />

@@ -29,7 +29,6 @@ async function fetchReviewsData(id: string) {
 export default async function RoomDetailPage({ params: { id } }: IdParams) {
   const result = await fetch(`http://localhost:8080/api/room/roomDetail/${id}`)
   const roomData = await result.json()
-
   const reviewsData = await fetchReviewsData(id)
 
   if (!roomData) {

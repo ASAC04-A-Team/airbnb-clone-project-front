@@ -69,7 +69,7 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
         onClick={handleOpen}
         className=' px-[23px] py-[13px] bg-white border-[1px] border-mainBlack rounded-lg'
       >
-        <span className='text-mainBlack text-[16px] font-semibold'>
+        <span className='text-mainBlack text-base font-semibold'>
           {`리뷰 ${reviews.length}개 모두 보기`}
         </span>
       </button>
