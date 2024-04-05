@@ -238,6 +238,7 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
                       <div className='w-12 h-full mr-[14px]'>
                         <div className='relative w-12 h-12'>
                           <Image
+                            key={index}
                             src={eachReview.reviewer.profileImageUrl}
                             alt={`${index}. reviewer profileImage`}
                             fill

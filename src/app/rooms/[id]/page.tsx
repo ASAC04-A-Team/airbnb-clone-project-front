@@ -28,7 +28,6 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
   const roomData = inner.data
 
   const reviewsData = await fetchReviewsData(id)
-  console.log('Debug 3: ', reviewsData)
 
   if (!roomData) {
     return <div>존재하지 않는 방입니다.</div>

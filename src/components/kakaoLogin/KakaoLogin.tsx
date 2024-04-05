@@ -21,6 +21,7 @@ interface KakaoLoginProps {
 export default function KakaoLogin({ KakaoLocation }: KakaoLoginProps) {
   useEffect(() => {
     const search = new URLSearchParams(window.location.search) //인가 코드 요청시 redirect로 받는 값 http://localhost:3000/login?code= 인가 코드 (매번 바뀌는 값임)
+
     const code = search.get('code') // code부분인 인가 코드 추츨
 
     const accessToken = localStorage.getItem('access_token')
@@ -28,6 +29,7 @@ export default function KakaoLogin({ KakaoLocation }: KakaoLoginProps) {
     //카카오로부터 redirect 당한 경우 code가 들어있을 것이다!
     if (code && (!accessToken || accessToken === 'undefined')) {
       //post로 aouth/token 토큰 요청하는 부분
+
       handleGetToken()
     }
   }, []) //최초 진입시 발동 (1.실제 최초인 경우 2. 카카오로부터 redirect 당해서 진입한 경우)
@@ -36,8 +38,10 @@ export default function KakaoLogin({ KakaoLocation }: KakaoLoginProps) {
     const { token_type, access_token, expires_token, refresh_token, refresh_token_expires_in } =
       await getToken()
 
-    localStorage.setItem('access_token', access_token)
-    window.close()
+    if (access_token) {
+      localStorage.setItem('access_token', access_token)
+      window.close()
+    }
   }
 
   //authParam은 카카오에 인가코드 요청할 떄 필요한 파라미터 값임

@@ -70,9 +70,7 @@ export default function ViewMore1() {
       setBtnStatus(false)
     }
   }
-  useEffect(() => {
-    console.log('ScrollY is ', ScrollY) // ScrollY가 변화할때마다 값을 콘솔에 출력
-  }, [ScrollY])
+  useEffect(() => {}, [ScrollY])
 
   const handleTop = () => {
     // 클릭하면 스크롤이 위로 올라가는 함수
