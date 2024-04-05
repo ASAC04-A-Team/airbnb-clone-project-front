@@ -13,6 +13,11 @@ async function fetchReviewsData(id: string) {
   try {
     const result = await fetch(`http://localhost:8080/api/review/${id}`)
 
+    if (result.status === 500) {
+      const emtiyArray: object[] = []
+      return emtiyArray
+    }
+
     const reviewsData = await result.json()
     return reviewsData
   } catch (error) {

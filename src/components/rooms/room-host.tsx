@@ -3,17 +3,12 @@ import Image from 'next/image'
 export default async function RoomHost({ id }: { id: string }) {
   const result = await fetch(` http://localhost:8080/api/room/roomHost/${id}`)
   const inner = await result.json()
-  console.log(result.status)
+  const host = inner
+
   if (result.status === 500) {
     return <div>host가 없습니다.</div>
   }
-  const host = inner
-  console.log(host)
 
-  const hostExist = host.length > 0
-  if (!hostExist) {
-    return <div>호스트가 존재하지않습니다.</div>
-  }
   return (
     <>
       <div>

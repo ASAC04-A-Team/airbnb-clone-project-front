@@ -42,7 +42,7 @@ export default function ReservationScreen({ roomData, id }: { roomData: Room; id
               <hr />
               <RoomAdvantage id={id} />
               <hr />
-              <RoomDescription />
+              <RoomDescription roomDescription={roomData.description} />
               <hr />
               <RoomComport id={id} />
               <hr />
