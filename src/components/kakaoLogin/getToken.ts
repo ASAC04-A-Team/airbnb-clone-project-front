@@ -17,7 +17,8 @@ export const getToken = async () => {
   const param = new URLSearchParams({
     grant_type: 'authorization_code',
     client_id: KAKAO_API_KEY || '',
-    redirect_uri: 'http://localhost:3000/kakaoLogin',
+    // redirect_uri: 'http://localhost:3000/kakaoLogin',
+    redirect_uri: 'http://localhost:8080/kakaoLogin',
     code,
   })
 

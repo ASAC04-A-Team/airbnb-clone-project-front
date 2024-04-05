@@ -11,7 +11,8 @@ interface IdParams {
 
 async function fetchReviewsData(id: number) {
   try {
-    const result = await fetch(`http://localhost:3000/api/room/${id}/review`)
+    // const result = await fetch(`http://localhost:3000/api/room/${id}/review`)
+    const result = await fetch(`http://localhost:8080/api/room/${id}/review`)
     const inner = await result.json()
     return inner.data
   } catch (error) {
@@ -21,7 +22,8 @@ async function fetchReviewsData(id: number) {
 }
 
 export default async function RoomDetailPage({ params: { id } }: IdParams) {
-  const result = await fetch(`http://localhost:3000/api/room/${id}`)
+  const result = await fetch(`http://localhost:8080/api/room/${id}`)
+  // const result = await fetch(`http://localhost:3000/api/room/${id}`)
   const inner = await result.json()
   const roomData = inner.data
 

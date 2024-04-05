@@ -203,15 +203,13 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
                     <div>
                       <ul>
                         {menus.map((menu, index) => (
-                          <div>
-                            <li
-                              className='w-40 h-10 hover:bg-slate-200'
-                              key={index}
-                              onClick={() => handleMenuClick(menu)}
-                            >
-                              {menu}
-                            </li>
-                          </div>
+                          <li
+                            className='w-40 h-10 hover:bg-slate-200'
+                            key={index}
+                            onClick={() => handleMenuClick(menu)}
+                          >
+                            {menu}
+                          </li>
                         ))}
                       </ul>
                     </div>

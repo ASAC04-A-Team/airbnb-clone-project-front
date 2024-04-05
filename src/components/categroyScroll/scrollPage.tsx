@@ -2,7 +2,8 @@ import FitterButton from '@/components/categroyScroll/fillterButton'
 import HorizonScroll from '@/components/categroyScroll/horizonScroll'
 
 export default async function ScrollPage() {
-  const result = await fetch(`http://localhost:3000/api/`)
+  // const result = await fetch(`http://localhost:3000/api/`)
+  const result = await fetch(`http://localhost:8080/api/category`)
   const inner = await result.json()
   const categroyIconData = inner.data
 
@@ -11,7 +12,7 @@ export default async function ScrollPage() {
       <div className='flex w-[91.16%] h-20 grow'>
         <HorizonScroll categoryList={categroyIconData} />
       </div>
-      <div className='flex grow-0 hidden sm:block sm:visible md:visible lg:visible xl:visible 2xl:visible'>
+      <div className='grow-0 hidden sm:block sm:visible md:visible lg:visible xl:visible 2xl:visible'>
         <FitterButton />
       </div>
     </div>

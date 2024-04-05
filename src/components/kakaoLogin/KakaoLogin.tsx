@@ -6,7 +6,8 @@ import { isNull } from 'lodash'
 
 const KAKAO_API_KEY = process.env.NEXT_PUBLIC_API_KEY
 const client_id = KAKAO_API_KEY || ''
-const redirect_uri = 'http://localhost:3000/kakaoLogin'
+// const redirect_uri = 'http://localhost:3000/kakaoLogin'
+const redirect_uri = 'http://localhost:8080/kakaoLogin'
 const response_type = 'code'
 
 interface KakaoLoginProps {
