@@ -73,22 +73,23 @@ export default function ReviewModal({
     <>
       <Modal open={reviewModalOpen} onClose={handleClose}>
         <Box
-          className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-           bg-white border-1 border-black shadow-lg
-           md:w-[90%] md:h-[900px] md:mx-3 md:rounded-2xl
-           lg:w-[1032px] lg:h-[900px]
-           w-full h-full '
+          className='border-1 relative left-1/2 top-1/2 h-full w-full
+          -translate-x-1/2
+           -translate-y-1/2 transform border-black bg-white
+           p-3 shadow-lg md:mx-3 md:h-[900px]
+           md:w-[90%] md:rounded-2xl
+           lg:h-[900px] lg:w-[1032px] '
         >
           {/* 닫는 버튼  */}
-          <div className='w-full h-[72px] flex items-center relative'>
-            <button className='text-black absolute left-7' onClick={handleClose}>
+          <div className='relative flex h-[72px] w-full items-center'>
+            <button className='absolute left-7 text-black' onClick={handleClose}>
               <CloseIcon />
             </button>
           </div>
 
           {/* 리뷰 및 별점 전체로 묶은 곳 */}
           {/* lg 이전에는 가로로 xl 이후로는 세로로  구역 두개로 묶어서 처리*/}
-          <div className='max-h-[600px] w-[1150px] overflow-y-auto overflow-x-hidden ml-2 mt-8'>
+          <div className='ml-2 mt-8 max-h-[600px] w-[1150px] overflow-y-auto overflow-x-hidden'>
             {/* 별점 및 점수 처리 */}
             <div>
               {reviews.length > 2 ? (
@@ -98,44 +99,44 @@ export default function ReviewModal({
                 </div>
               ) : (
                 <div className='mb-3'>
-                  <span className='text-mainGray text-[14px]'>
+                  <span className='text-[14px] text-mainGray'>
                     후기가 3개 이상이면 별점이 표시됩니다.
                   </span>
                 </div>
               )}
             </div>
-            <div className='flex relative top-12'>
+            <div className='relative top-12 flex'>
               <div className='w-44 border-r-2'>
                 <div className=''>전체 평점</div>
                 <ol>
                   <li>
                     <div className='flex'>
                       <div className='text-sm'>5</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                      <div className='ml-4 mt-2 h-1 w-[120px] max-w-xs rounded-xl bg-gray-200'></div>
                     </div>
                   </li>
                   <li>
                     <div className='flex'>
                       <div className='text-sm'>4</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                      <div className='ml-4 mt-2 h-1 w-[120px] max-w-xs rounded-xl bg-gray-200'></div>
                     </div>
                   </li>
                   <li>
                     <div className='flex'>
                       <div className='text-sm'>3</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                      <div className='ml-4 mt-2 h-1 w-[120px] max-w-xs rounded-xl bg-gray-200'></div>
                     </div>
                   </li>
                   <li>
                     <div className='flex'>
                       <div className='text-sm'>2</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                      <div className='ml-4 mt-2 h-1 w-[120px] max-w-xs rounded-xl bg-gray-200'></div>
                     </div>
                   </li>
                   <li>
                     <div className='flex'>
                       <div className='text-sm'>1</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                      <div className='ml-4 mt-2 h-1 w-[120px] max-w-xs rounded-xl bg-gray-200'></div>
                     </div>
                   </li>
                 </ol>
@@ -177,7 +178,7 @@ export default function ReviewModal({
               </div>
             </div>
 
-            <div className='w-[1200px] divide-y-2 divide-gray-400 -ml-8'>
+            <div className='-ml-8 w-[1200px] divide-y-2 divide-gray-400'>
               <div className='mt-20'></div>
               <div></div>
             </div>
@@ -187,11 +188,11 @@ export default function ReviewModal({
               <div className='relative top-8 text-2xl font-semibold'>{`후기 ${reviews.length}개`}</div>
               <div className='flex justify-end'>
                 <div className='group inline-block'>
-                  <button className='pl-2 bg-white font-semibold border rounded-2xl flex items-center max-w-32 h-12'>
+                  <button className='flex h-12 max-w-32 items-center rounded-2xl border bg-white pl-2 font-semibold'>
                     <p className='pr-1 font-semibold'>{selectedMenu}</p>
                     <svg
-                      className='fill-current h-4 w-4 transform group-hover:-rotate-180
-                    transition duration-150 ease-in-out'
+                      className='h-4 w-4 transform fill-current transition
+                    duration-150 ease-in-out group-hover:-rotate-180'
                       xmlns='http://www.w3.org/2000/svg'
                       viewBox='0 0 20 20'
                     >
@@ -199,14 +200,14 @@ export default function ReviewModal({
                     </svg>
                   </button>
                   <div
-                    className='bg-white border rounded-sm transform scale-0 group-hover:scale-100
-                  absolute transition duration-150 origin-top-left w-40 -translate-x-20'
+                    className='absolute w-40 origin-top-left -translate-x-20 scale-0 transform
+                  rounded-sm border bg-white transition duration-150 group-hover:scale-100'
                   >
                     <div>
                       <ul>
                         {menus.map((menu, index) => (
                           <li
-                            className='w-40 h-10 hover:bg-slate-200'
+                            className='h-10 w-40 hover:bg-slate-200'
                             key={index}
                             onClick={() => handleMenuClick(menu)}
                           >
@@ -219,13 +220,13 @@ export default function ReviewModal({
                 </div>
               </div>
             </div>
-            <div className='w-full mt-12 h-11 rounded-3xl border-2 border-black'>
+            <div className='mt-12 h-11 w-full rounded-3xl border-2 border-black'>
               <label className='flex'>
-                <div className='mt-3 ml-4'>
+                <div className='ml-4 mt-3'>
                   <Search />
                 </div>
                 <input
-                  className='mt-0 ml-2 h-10 text-xl focus:outline-none'
+                  className='ml-2 mt-0 h-10 text-xl focus:outline-none'
                   type='text'
                   placeholder='후기 검색'
                 />
@@ -236,30 +237,30 @@ export default function ReviewModal({
               {reviewExist ? (
                 initialReviews.map((eachReview, index) => (
                   <section key={index} className='flex flex-col md:h-[226px] lg:h-[150px] '>
-                    <div className='flex ml-0 mr-auto mb-2'>
-                      <div className='w-12 h-full mr-[14px]'>
-                        <div className='relative w-12 h-12'>
+                    <div className='mb-2 ml-0 mr-auto flex'>
+                      <div className='mr-[14px] h-full w-12'>
+                        <div className='relative h-12 w-12'>
                           <Image
                             key={index}
                             src={eachReview.reviewerProfileImageUrl}
                             alt={`${index}. reviewer profileImage`}
                             fill
-                            className='object-cover rounded-full'
+                            className='rounded-full object-cover'
                           />
                         </div>
                       </div>
                       <div className='flex flex-col justify-center space-y-[2px]'>
-                        <div className='text-[16px] text-mainBlack font-semibold'>
+                        <div className='text-[16px] font-semibold text-mainBlack'>
                           {`${eachReview.reviewerName}`}
                         </div>
                         <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
                       </div>
                     </div>
-                    <div className='ml-0 mr-auto flex items-center mb-1 space-x-1'>
+                    <div className='mb-1 ml-0 mr-auto flex items-center space-x-1'>
                       <StarRateGenerator score={eachReview.score} />
                     </div>
                     <div className='ml-0 mr-auto overflow-hidden'>
-                      <p className='w-[450px] h-[72px] line-break-auto line-height-1.5 break-keep'>
+                      <p className='line-break-auto line-height-1.5 h-[72px] w-[450px] break-keep'>
                         {`${eachReview.content}`}
                       </p>
                     </div>
