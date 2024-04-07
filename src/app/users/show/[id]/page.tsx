@@ -9,9 +9,11 @@ interface IdParams {
 }
 
 export default async function UserProfilePage({ params: { id } }: IdParams) {
-  const result = await fetch(`http://localhost:8080/api/users/introduction/${id}`)
+  const result = await fetch(`http://localhost:8080/api/users/authInformation/${id}`)
 
   const usersData = await result.json()
+
+  console.log('nicknam->' + usersData.nickname)
 
   return (
     <section className='relative flex top-[40px] flex-wrap left-[100px]'>
@@ -19,14 +21,14 @@ export default async function UserProfilePage({ params: { id } }: IdParams) {
         <Information id={id} />
 
         {usersData.isAuth === true ? (
-          <IsAuthinfo name={usersData.name} />
+          <IsAuthinfo name={usersData.nickname} />
         ) : (
-          <Authinfo name={usersData.name} />
+          <Authinfo name={usersData.nickname} />
         )}
       </div>
       <div className='relative w-full md:w-2/3'>
         <Introduction id={id} />
-        <Review name={usersData.name} />
+        <Review name={usersData.nickname} />
       </div>
     </section>
   )

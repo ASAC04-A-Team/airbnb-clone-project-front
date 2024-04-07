@@ -4,9 +4,6 @@ export default async function information({ id }: { id: string }) {
   const result = await fetch(`http://localhost:8080/api/users/information/${id}`)
   const userInformation = await result.json()
 
-  console.log('sinceRegistration' + userInformation.sinceRegistration)
-  console.log('sinceRegistration' + userInformation.profileImageUrl)
-
   return (
     <span className='relative block w-[342px] h-[240px] p-6 bg-white border border-gray-200 rounded-s-3xl rounded-e-3xl shadow-xl drop-shadow-lg  right-[-10px] '>
       <div className='relative flex bottom-[-20px]'>
