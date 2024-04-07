@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import CloseIcon from '/public/svgIcons/closeIcon.svg'
@@ -43,6 +43,35 @@ const getAvgScore = (reviews: Review[]): number => {
   return Math.round(avgScore * 10) / 10
 }
 
+const getScorePersent = (reviews: Review[]): string[] => {
+  let oneReviewScore = 0
+  let twoReviewScore = 0
+  let threeReviewScore = 0
+  let fourReviewScore = 0
+  let fiveReviewScore = 0
+  for (const reviewscore of reviews) {
+    if (reviewscore.score === 1) {
+      oneReviewScore += 1
+    } else if (reviewscore.score === 2) {
+      twoReviewScore += 1
+    } else if (reviewscore.score === 3) {
+      threeReviewScore += 1
+    } else if (reviewscore.score === 4) {
+      fourReviewScore += 1
+    } else if (reviewscore.score === 5) {
+      fiveReviewScore += 1
+    }
+  }
+
+  const fiveScorePercent = `${(fiveReviewScore / reviews.length) * 100}%`
+  const fourScorePercent = `${(fourReviewScore / reviews.length) * 100}%`
+  const threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
+  const twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
+  const oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+
+  return [fiveScorePercent, fourScorePercent, threeScorePercent, twoScorePercent, oneScorePercent]
+}
+
 export default function ReviewModal({
   reviews,
   reviewModalOpen,
@@ -63,31 +92,7 @@ export default function ReviewModal({
   const reviewExist = isReviewExist(reviews)
   const initialReviews = reviews.slice(0, 8)
   const avgScore = getAvgScore(reviews)
-
-  let oneReviewScore = 0
-  let twoReviewScore = 0
-  let threeReviewScore = 0
-  let fourReviewScore = 0
-  let fiveReviewScore = 0
-  for (const reviewscore of reviews) {
-    if (reviewscore.score === 1) {
-      oneReviewScore += 1
-    } else if (reviewscore.score === 2) {
-      twoReviewScore += 1
-    } else if (reviewscore.score === 3) {
-      threeReviewScore += 1
-    } else if (reviewscore.score === 4) {
-      fourReviewScore += 1
-    } else if (reviewscore.score === 5) {
-      fiveReviewScore += 1
-    }
-  }
-
-  const fiveScorePercent = `${Math.round((fiveReviewScore / reviews.length) * 100)}%`
-  const fourScorePercent = `${Math.round((fourReviewScore / reviews.length) * 100)}%`
-  const threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
-  const twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
-  const oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+  const scorePersent = getScorePersent(reviews)
 
   return (
     <>
@@ -133,31 +138,31 @@ export default function ReviewModal({
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>5</span>
                     <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200 xl:w-full'>
-                      <div className={`h-1 w-[${fiveScorePercent}] bg-black`}></div>
+                      <div className={`h-1 w-[${scorePersent[0]}] bg-black`}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>4</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${fourScorePercent}] bg-black`}></div>
+                      <div className={`h-1 w-[${scorePersent[1]}] bg-black`}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>3</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${threeScorePercent}] bg-black`}></div>
+                      <div className={`h-1 w-[${scorePersent[2]}] bg-black`}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>2</span>
                     <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${twoScorePercent}] bg-black`}></div>
+                      <div className={`h-1 w-[${scorePersent[3]}] bg-black`}></div>
                     </div>
                   </div>
                   <div className='flex flex-nowrap items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>1</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${oneScorePercent}] bg-black`}></div>
+                      <div className={`h-1 w-[${scorePersent[4]}] bg-black`}></div>
                     </div>
                   </div>
                 </div>
