@@ -26,12 +26,9 @@ export default function review({ name }: { name: string }) {
       <br />
       <br />
       <hr />
-      <a
-        href='#'
-        className='relative font-semibold underline text-gray-900 decoration-black bottom-[-30px]'
-      >
+      <p className='relative font-semibold underline text-gray-900 decoration-black bottom-[-30px]'>
         내가 작성한 후기
-      </a>
+      </p>
     </div>
   )
 }

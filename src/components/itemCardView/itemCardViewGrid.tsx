@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react'
 import ItemCardView from '@/components/itemCardView/itemCardView'
 
-interface Room {
+interface roomItem {
   id: number
-  slides: string[]
+  roomImageUrls: string[]
   host: string
   guestPreference: boolean
   price: string
@@ -13,45 +13,14 @@ interface Room {
 }
 
 interface Props {
-  roomsData: Room[]
+  roomsData: roomItem[]
 }
 
 export default function ItemCardViewGrid({ roomsData }: Props) {
-  const [items, setItems] = useState<Room[]>(roomsData.slice(0, 20))
-  const [hasMore, setHasMore] = useState(true)
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-        document.documentElement.offsetHeight ||
-      !hasMore
-    )
-      return
-    loadMoreData()
-  }
-
-  const loadMoreData = () => {
-    if (items.length >= roomsData.length) {
-      setHasMore(false)
-      return
-    }
-    setTimeout(() => {
-      setItems((prevItems) => [
-        ...prevItems,
-        ...roomsData.slice(prevItems.length, prevItems.length + 20),
-      ])
-    }, 500)
-  }
-
-  const itemsMap = items.map((item: Room, index: number) => (
+  const itemsMap = roomsData.map((item: roomItem, index: number) => (
     <ItemCardView
       key={index}
-      slides={item.slides}
+      roomImageUrls={item.roomImageUrls}
       id={item.id}
       host={item.host}
       guestPreference={item.guestPreference}

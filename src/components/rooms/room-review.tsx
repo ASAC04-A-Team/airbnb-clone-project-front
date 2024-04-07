@@ -7,16 +7,13 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 interface Review {
-  id: number
-  reviewer: {
-    name: string
-    profileImageUrl: string
-    address: string
-  }
+  reviewId: number
   content: string
-  date: string
-  roomId: number
+  writeAt: string
+  reviewerName: string
+  reviewerProfileImageUrl: string
   score: number
+  nation: string
 }
 
 const isReviewExist = (reviews: Review[]): boolean => {
@@ -83,7 +80,7 @@ export default function RoomReview({ reviews }: { reviews: Review[] }) {
                         <div className='w-12 h-full mr-[14px]'>
                           <div className='relative w-12 h-12'>
                             <Image
-                              src={eachReview.reviewer.profileImageUrl}
+                              src={eachReview.reviewerProfileImageUrl}
                               alt={`${index}. reviewer profileImage`}
                               fill
                               className='object-cover rounded-full'
@@ -92,11 +89,9 @@ export default function RoomReview({ reviews }: { reviews: Review[] }) {
                         </div>
                         <div className='flex flex-col justify-center space-y-[2px]'>
                           <div className='text-[16px] text-mainBlack font-semibold'>
-                            {`${eachReview.reviewer.name}`}
+                            {`${eachReview.reviewerName}`}
                           </div>
-                          <div className='text-[14px] text-mainGray'>
-                            {`${eachReview.reviewer.address}`}
-                          </div>
+                          <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
                         </div>
                       </div>
                     </div>

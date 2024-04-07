@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-export default function identification({ name }: { name: string }) {
+export default function identification({ id }: { id: string }) {
   return (
     <span className='relative block w-[342px] h-[240px] p-6 bg-white border border-gray-200 rounded-s-3xl rounded-e-3xl shadow-xl drop-shadow-lg  right-[-10px] '>
       <div className='relative flex bottom-[-20px]'>
@@ -16,7 +16,7 @@ export default function identification({ name }: { name: string }) {
             />
           </div>
           <div>
-            <h2 className='relative text-3xl font-bold bottom-[-5px] '>{name}</h2>
+            <h2 className='relative text-3xl font-bold bottom-[-5px] '>{id}</h2>
           </div>
           <h1 className='relative text-xs font-bold bottom-[-5px]'> 게스트</h1>
         </div>

@@ -3,6 +3,9 @@ import Image from 'next/image'
 export default function RoomAlbum({ images }: { images: string[] }) {
   // const roomAlbum = getRoomAlbum(id);
 
+  if (!images) {
+    return []
+  }
   return (
     <>
       <div>

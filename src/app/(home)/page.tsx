@@ -1,13 +1,13 @@
-import Headers from '@/app/(home)/header'
-import ItemCardPage from '@/components/itemCardView/itemCardPage'
+import ItemCardViewGrid from '@/components/itemCardView/itemCardViewGrid'
 
 export default async function HomePage() {
+  const result = await fetch(`http://localhost:8080/api/home/1`)
+  const inner = await result.json()
+  const roomsData = inner.roomItem
+
   return (
     <>
-      <main className='flex flex-col items-center justify-center w-full h-full'>
-        <Headers />
-        <ItemCardPage />
-      </main>
+      <ItemCardViewGrid roomsData={roomsData} />
     </>
   )
 }
