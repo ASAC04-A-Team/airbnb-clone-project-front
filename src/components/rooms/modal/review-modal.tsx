@@ -64,6 +64,31 @@ export default function ReviewModal({
   const initialReviews = reviews.slice(0, 8)
   const avgScore = getAvgScore(reviews)
 
+  let oneReviewScore = 0
+  let twoReviewScore = 0
+  let threeReviewScore = 0
+  let fourReviewScore = 0
+  let fiveReviewScore = 0
+  for (const reviewscore of reviews) {
+    if (reviewscore.score === 1) {
+      oneReviewScore += 1
+    } else if (reviewscore.score === 2) {
+      twoReviewScore += 1
+    } else if (reviewscore.score === 3) {
+      threeReviewScore += 1
+    } else if (reviewscore.score === 4) {
+      fourReviewScore += 1
+    } else if (reviewscore.score === 5) {
+      fiveReviewScore += 1
+    }
+  }
+
+  const fiveScorePercent = `${Math.round((fiveReviewScore / reviews.length) * 100)}%`
+  const fourScorePercent = `${Math.round((fourReviewScore / reviews.length) * 100)}%`
+  const threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
+  const twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
+  const oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+
   return (
     <>
       <Modal open={reviewModalOpen} onClose={handleClose}>
@@ -107,59 +132,69 @@ export default function ReviewModal({
                   <div className='text-xs xl:text-sm'>전체 평점</div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>5</span>
-                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200 xl:w-full'></div>
+                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200 xl:w-full'>
+                      <div className={`h-1 w-[${fiveScorePercent}] bg-black`}></div>
+                    </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>4</span>
-                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'></div>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${fourScorePercent}] bg-black`}></div>
+                    </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>3</span>
-                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'></div>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${threeScorePercent}] bg-black`}></div>
+                    </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>2</span>
-                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'></div>
+                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${twoScorePercent}] bg-black`}></div>
+                    </div>
                   </div>
                   <div className='flex flex-nowrap items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>1</span>
-                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'></div>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${oneScorePercent}] bg-black`}></div>
+                    </div>
                   </div>
                 </div>
 
                 <div className='relative  h-[95px] w-36 border-r-2 px-3  xl:mt-5 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>청결도</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
 
                   <Cleanliness className='absolute bottom-3' />
                 </div>
 
                 <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>정확도</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
                   <Accuracy className='absolute bottom-3' />
                 </div>
                 <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>체크인</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
                   <CheckIn className='absolute bottom-3' />
                 </div>
 
                 <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>의사소통</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
                   <Interaction className='absolute bottom-3' />
                 </div>
 
                 <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>위치</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
                   <Location className='absolute bottom-3' />
                 </div>
 
                 <div className='relative  h-[95px] w-36  break-keep pl-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
                   <span className='xl:absolute xl:bottom-4 xl:left-10'>가격 대비 만족도</span>
-                  <div className='xl:absolute xl:bottom-4 xl:right-0'>4.8</div>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
                   <Satisfication className='absolute bottom-3' />
                 </div>
               </div>
@@ -225,8 +260,8 @@ export default function ReviewModal({
               </div>
 
               <form
-                action={'http://localhost:8080/api/review/1'}
-                method='get'
+                // action={'http://localhost:8080/api/review/1'}
+                //method='get'
                 className='group mt-3 flex h-11 w-[98%] items-center rounded-3xl border border-mainGray px-4 focus-within:border-2'
               >
                 <Search className=' flex-none' />
