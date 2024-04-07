@@ -13,8 +13,6 @@ export default async function UserProfilePage({ params: { id } }: IdParams) {
 
   const usersData = await result.json()
 
-  console.log('nicknam->' + usersData.nickname)
-
   return (
     <section className='relative flex top-[40px] flex-wrap left-[100px]'>
       <div className='relative left-[200px] md:w-1/3 mb-4 md:mb-0'>
@@ -28,7 +26,7 @@ export default async function UserProfilePage({ params: { id } }: IdParams) {
       </div>
       <div className='relative w-full md:w-2/3'>
         <Introduction id={id} />
-        <Review name={usersData.nickname} />
+        <Review name={usersData.nickname} id={id} />
       </div>
     </section>
   )
