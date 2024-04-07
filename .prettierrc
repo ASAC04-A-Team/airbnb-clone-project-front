@@ -4,5 +4,6 @@
   "trailingComma": "all",
   "singleQuote": true,
   "jsxSingleQuote": true,
-  "semi": false
+  "semi": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

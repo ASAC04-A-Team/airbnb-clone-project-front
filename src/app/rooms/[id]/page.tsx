@@ -52,7 +52,7 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
             <RoomAlbum images={roomData.roomImageUrls} />
           </Screen>
           <Screen>
-            <ReservationScreen roomData={roomData} id={id} />
+            <ReservationScreen roomData={roomData} id={id} reviews={reviewsData} />
           </Screen>
           <Screen>
             <RoomReview reviews={reviewsData} />

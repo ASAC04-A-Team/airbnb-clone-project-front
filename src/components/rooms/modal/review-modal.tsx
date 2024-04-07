@@ -14,6 +14,7 @@ import Satisfication from '/public/svgIcons/reviewModalSvgs/satisfactionCompared
 import Search from '/public/svgIcons/reviewModalSvgs/search.svg'
 import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
 import Image from 'next/image'
+import DownIcon from '/public/svgIcons/reviewModalSvgs/down.svg'
 
 interface Review {
   reviewId: number
@@ -42,227 +43,274 @@ const getAvgScore = (reviews: Review[]): number => {
   return Math.round(avgScore * 10) / 10
 }
 
-export default function ReviewModal({ reviews }: { reviews: Review[] }) {
-  const [open, setOpen] = useState(false)
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
+export default function ReviewModal({
+  reviews,
+  reviewModalOpen,
+  setReviewModalOpen,
+}: {
+  reviews: Review[]
+  reviewModalOpen: boolean
+  setReviewModalOpen: (newValue: boolean) => void
+}) {
   const handleClose = () => {
-    setOpen(false)
+    setReviewModalOpen(false)
   }
 
+  const [onFocusButton, setOnFocusButton] = useState(false)
+  const [onClickSearchMenu, setOnClickSearchMenu] = useState(false)
   const [selectedMenu, setSelectedMenu] = useState('최신순')
-  const menus = ['최신순', '높은 평점순', '낮은 평점순']
-  const handleMenuClick = (menuName: React.SetStateAction<string>) => {
-    setSelectedMenu(menuName)
-  }
 
   const reviewExist = isReviewExist(reviews)
   const initialReviews = reviews.slice(0, 8)
   const avgScore = getAvgScore(reviews)
 
+  let oneReviewScore = 0
+  let twoReviewScore = 0
+  let threeReviewScore = 0
+  let fourReviewScore = 0
+  let fiveReviewScore = 0
+  for (const reviewscore of reviews) {
+    if (reviewscore.score === 1) {
+      oneReviewScore += 1
+    } else if (reviewscore.score === 2) {
+      twoReviewScore += 1
+    } else if (reviewscore.score === 3) {
+      threeReviewScore += 1
+    } else if (reviewscore.score === 4) {
+      fourReviewScore += 1
+    } else if (reviewscore.score === 5) {
+      fiveReviewScore += 1
+    }
+  }
+
+  const fiveScorePercent = `${Math.round((fiveReviewScore / reviews.length) * 100)}%`
+  const fourScorePercent = `${Math.round((fourReviewScore / reviews.length) * 100)}%`
+  const threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
+  const twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
+  const oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+
   return (
     <>
-      <button
-        onClick={handleOpen}
-        className=' px-[23px] py-[13px] bg-white border-[1px] border-mainBlack rounded-lg'
-      >
-        <span className='text-mainBlack text-base font-semibold'>
-          {`리뷰 ${reviews.length}개 모두 보기`}
-        </span>
-      </button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={reviewModalOpen} onClose={handleClose}>
         <Box
-          className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl
-           bg-white border-2 border-black shadow-lg p-8 w-[1200px] h-[780px]'
+          className='border-1 relative left-1/2 top-1/2 h-full w-full
+          -translate-x-1/2
+           -translate-y-1/2 transform overflow-hidden border-black bg-white
+           pb-10 shadow-lg md:mx-3
+           md:h-[900px] md:w-[90%]
+           md:rounded-2xl lg:h-[900px]
+           lg:w-[1032px]'
         >
-          <div>
-            <header>
-              <button className='border-none text-black -p-12' onClick={handleClose}>
-                <CloseIcon />
-              </button>
-            </header>
+          {/* 닫는 버튼  */}
+          <div className='relative flex h-[72px] w-full items-center'>
+            <button className='absolute left-4 text-black' onClick={handleClose}>
+              <CloseIcon />
+            </button>
           </div>
-          <div className='max-h-[600px] w-[1150px] overflow-y-auto overflow-x-hidden ml-2 mt-8'>
-            <div>
-              {reviews.length > 2 ? (
-                <div className='flex'>
-                  <Star />
-                  <div className='pl-3 text-3xl font-semibold'>{`${avgScore}`}</div>
-                </div>
-              ) : (
-                <div className='mb-3'>
-                  <span className='text-mainGray text-[14px]'>
-                    후기가 3개 이상이면 별점이 표시됩니다.
-                  </span>
-                </div>
-              )}
-            </div>
-            <div className='flex relative top-12'>
-              <div className='w-44 border-r-2'>
-                <div className=''>전체 평점</div>
-                <ol>
-                  <li>
-                    <div className='flex'>
-                      <div className='text-sm'>5</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+
+          {/* 리뷰 및 별점 전체로 묶은 곳 */}
+          {/* lg 이전에는 가로로 xl 이후로는 세로로  구역 두개로 묶어서 처리*/}
+          <div className=' flex h-full w-full flex-col overflow-y-auto xl:flex-row xl:justify-center'>
+            {/* 별점 및 점수 처리 */}
+            <div className='p-4 xl:w-[277px]  xl:flex-col xl:p-8'>
+              <div className='xl:h-[37px] xl:w-full'>
+                {reviews.length > 2 ? (
+                  <div className='flex items-center gap-2'>
+                    <Star style={{ width: '24px', height: '24px' }} />
+                    <div className=' text-3xl font-semibold'>{`${avgScore}`}</div>
+                  </div>
+                ) : (
+                  <div className='mb-3'>
+                    <span className='text-base text-mainGray'>
+                      후기가 3개 이상이면 별점이 표시됩니다.
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className='flex flex h-[128px] w-full items-center justify-center text-xs xl:mt-5 xl:flex-col xl:items-baseline xl:justify-normal xl:gap-3'>
+                <div className=' h-[95px] w-40 flex-col items-center justify-center border-r-2 px-3 xl:w-full xl:border-r-0 xl:px-0'>
+                  <div className='text-xs xl:text-sm'>전체 평점</div>
+                  <div className='flex items-center'>
+                    <span className='text-[10px] text-gray-500 xl:text-black'>5</span>
+                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200 xl:w-full'>
+                      <div className={`h-1 w-[${fiveScorePercent}] bg-black`}></div>
                     </div>
-                  </li>
-                  <li>
-                    <div className='flex'>
-                      <div className='text-sm'>4</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                  </div>
+                  <div className='flex items-center'>
+                    <span className='text-[10px] text-gray-500 xl:text-black'>4</span>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${fourScorePercent}] bg-black`}></div>
                     </div>
-                  </li>
-                  <li>
-                    <div className='flex'>
-                      <div className='text-sm'>3</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                  </div>
+                  <div className='flex items-center'>
+                    <span className='text-[10px] text-gray-500 xl:text-black'>3</span>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${threeScorePercent}] bg-black`}></div>
                     </div>
-                  </li>
-                  <li>
-                    <div className='flex'>
-                      <div className='text-sm'>2</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
+                  </div>
+                  <div className='flex items-center'>
+                    <span className='text-[10px] text-gray-500 xl:text-black'>2</span>
+                    <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${twoScorePercent}] bg-black`}></div>
                     </div>
-                  </li>
-                  <li>
-                    <div className='flex'>
-                      <div className='text-sm'>1</div>
-                      <div className='w-[120px] max-w-xs bg-gray-200 h-1 rounded-xl mt-2 ml-4'></div>
-                    </div>
-                  </li>
-                </ol>
-              </div>
-
-              <div className='w-36 border-r-2 pl-4'>
-                <div className='w-16'>청결도</div>
-                <div>4.8</div>
-                <Cleanliness className='mt-12' />
-              </div>
-
-              <div className='w-36 border-r-2 pl-4'>
-                <div className='w-16'>정확도</div>
-                <div>4.8</div>
-                <Accuracy className='mt-12' />
-              </div>
-              <div className='w-36 border-r-2 pl-4'>
-                <div className='w-16'>체크인</div>
-                <div>4.8</div>
-                <CheckIn className='mt-12' />
-              </div>
-
-              <div className='w-36 border-r-2 pl-4'>
-                <div className='w-16'>의사소통</div>
-                <div>4.8</div>
-                <Interaction className='mt-12' />
-              </div>
-
-              <div className='w-36 border-r-2 pl-4'>
-                <div className='w-16'>위치</div>
-                <div>4.8</div>
-                <Location className='mt-12' />
-              </div>
-
-              <div className='w-36 pl-4'>
-                <div>가격 대비 만족도</div>
-                <div>4.8</div>
-                <Satisfication className='mt-12' />
-              </div>
-            </div>
-
-            <div className='w-[1200px] divide-y-2 divide-gray-400 -ml-8'>
-              <div className='mt-20'></div>
-              <div></div>
-            </div>
-
-            <div>
-              <div className='relative top-8 text-2xl font-semibold'>{`후기 ${reviews.length}개`}</div>
-              <div className='flex justify-end'>
-                <div className='group inline-block'>
-                  <button className='pl-2 bg-white font-semibold border rounded-2xl flex items-center max-w-32 h-12'>
-                    <p className='pr-1 font-semibold'>{selectedMenu}</p>
-                    <svg
-                      className='fill-current h-4 w-4 transform group-hover:-rotate-180
-                    transition duration-150 ease-in-out'
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 20 20'
-                    >
-                      <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
-                    </svg>
-                  </button>
-                  <div
-                    className='bg-white border rounded-sm transform scale-0 group-hover:scale-100
-                  absolute transition duration-150 origin-top-left w-40 -translate-x-20'
-                  >
-                    <div>
-                      <ul>
-                        {menus.map((menu, index) => (
-                          <li
-                            className='w-40 h-10 hover:bg-slate-200'
-                            key={index}
-                            onClick={() => handleMenuClick(menu)}
-                          >
-                            {menu}
-                          </li>
-                        ))}
-                      </ul>
+                  </div>
+                  <div className='flex flex-nowrap items-center'>
+                    <span className='text-[10px] text-gray-500 xl:text-black'>1</span>
+                    <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
+                      <div className={`h-1 w-[${oneScorePercent}] bg-black`}></div>
                     </div>
                   </div>
                 </div>
+
+                <div className='relative  h-[95px] w-36 border-r-2 px-3  xl:mt-5 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>청결도</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+
+                  <Cleanliness className='absolute bottom-3' />
+                </div>
+
+                <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>정확도</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+                  <Accuracy className='absolute bottom-3' />
+                </div>
+                <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>체크인</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+                  <CheckIn className='absolute bottom-3' />
+                </div>
+
+                <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>의사소통</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+                  <Interaction className='absolute bottom-3' />
+                </div>
+
+                <div className='relative  h-[95px] w-36 border-r-2 px-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='w-16 xl:absolute xl:bottom-4 xl:left-10'>위치</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+                  <Location className='absolute bottom-3' />
+                </div>
+
+                <div className='relative  h-[95px] w-36  break-keep pl-3 xl:w-full xl:border-b-2 xl:border-r-0 xl:p-5 xl:px-0'>
+                  <span className='xl:absolute xl:bottom-4 xl:left-10'>가격 대비 만족도</span>
+                  <div className='xl:absolute xl:bottom-4 xl:right-0'>{avgScore}</div>
+                  <Satisfication className='absolute bottom-3' />
+                </div>
               </div>
             </div>
-            <div className='w-full mt-12 h-11 rounded-3xl border-2 border-black'>
-              <label className='flex'>
-                <div className='mt-3 ml-4'>
-                  <Search />
+            <hr className='mt-2' />
+
+            {/* 리뷰 나오는 곳 */}
+            <div className='w-full flex-col items-center p-5 xl:w-[600px]'>
+              <div className='flex h-[32px] w-full items-center justify-between '>
+                <div className='text-xl font-semibold'>{`후기 ${reviews.length}개`}</div>
+                <div className='relative'>
+                  <button
+                    className='flex h-[32px] w-auto items-center gap-2 rounded-2xl border bg-white px-3 font-semibold'
+                    onClick={() => {
+                      setOnClickSearchMenu(true)
+                    }}
+                    onFocus={() => {
+                      setOnFocusButton(true)
+                    }}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget) && !onClickSearchMenu) {
+                        setOnFocusButton(false)
+                      }
+                    }}
+                  >
+                    <p className=' text-xs'>{selectedMenu}</p>
+                    <DownIcon />
+                  </button>
+                  <div
+                    className={`absolute right-0 w-40 rounded-sm border bg-white ${onClickSearchMenu && onFocusButton ? 'scale-100' : 'scale-0'}`}
+                  >
+                    <ul>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('최신순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        최신순
+                      </li>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('높은 평점순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        높은 평점순
+                      </li>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('낮은 평점순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        낮은 평점순
+                      </li>
+                    </ul>
+                  </div>
                 </div>
+              </div>
+
+              <form
+                // action={'http://localhost:8080/api/review/1'}
+                //method='get'
+                className='group mt-3 flex h-11 w-[98%] items-center rounded-3xl border border-mainGray px-4 focus-within:border-2'
+              >
+                <Search className=' flex-none' />
+
                 <input
-                  className='mt-0 ml-2 h-10 text-xl focus:outline-none'
+                  className='group ml-2 h-10  w-full text-base text-sm focus:outline-none'
                   type='text'
                   placeholder='후기 검색'
                 />
-              </label>
-            </div>
+              </form>
 
-            <div className='mt-6'>
-              {reviewExist ? (
-                initialReviews.map((eachReview, index) => (
-                  <section key={index} className='flex flex-col md:h-[226px] lg:h-[150px] '>
-                    <div className='flex ml-0 mr-auto mb-2'>
-                      <div className='w-12 h-full mr-[14px]'>
-                        <div className='relative w-12 h-12'>
+              <div className='mt-6'>
+                {reviewExist ? (
+                  initialReviews.map((eachReview, index) => (
+                    <section key={index} className='mb-7 flex flex-col gap-3'>
+                      <div className='flex flex-row gap-3'>
+                        <div className='relative h-12 w-12'>
                           <Image
                             key={index}
                             src={eachReview.reviewerProfileImageUrl}
                             alt={`${index}. reviewer profileImage`}
                             fill
-                            className='object-cover rounded-full'
+                            className='rounded-full object-cover'
                           />
                         </div>
-                      </div>
-                      <div className='flex flex-col justify-center space-y-[2px]'>
-                        <div className='text-[16px] text-mainBlack font-semibold'>
-                          {`${eachReview.reviewerName}`}
+
+                        <div className='flex flex-col justify-center space-y-[2px]'>
+                          <div className='text-[16px] font-semibold text-mainBlack'>
+                            {`${eachReview.reviewerName}`}
+                          </div>
+                          <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
                         </div>
-                        <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
                       </div>
-                    </div>
-                    <div className='ml-0 mr-auto flex items-center mb-1 space-x-1'>
-                      <StarRateGenerator score={eachReview.score} />
-                    </div>
-                    <div className='ml-0 mr-auto overflow-hidden'>
-                      <p className='w-[450px] h-[72px] line-break-auto line-height-1.5 break-keep'>
-                        {`${eachReview.content}`}
-                      </p>
-                    </div>
-                  </section>
-                ))
-              ) : (
-                <div>리뷰가 없습니다.</div>
-              )}
+                      <div>
+                        <div className='flex items-center space-x-1'>
+                          <StarRateGenerator score={eachReview.score} />
+                        </div>
+                        <div className='mt-1 overflow-hidden'>
+                          <p className='line-break-auto line-height-1.5 break-keep'>
+                            {`${eachReview.content}`}
+                          </p>
+                        </div>
+                      </div>
+                    </section>
+                  ))
+                ) : (
+                  <div>리뷰가 없습니다.</div>
+                )}
+              </div>
             </div>
           </div>
         </Box>
