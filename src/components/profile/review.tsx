@@ -27,8 +27,9 @@ export default async function review({ name, id }: { name: string; id: string })
             >
               <h5 className='mb-2 text-base tracking-tight text-gray-900'>{userData.content}</h5>
               <p className='font-bold'>{userData.nickname}</p>
-              <p>{userData.year}</p>
-              <p>{userData.month}</p>
+              <p>
+                {userData.year}년 {userData.month}월
+              </p>
             </span>
           ))}
         </div>
