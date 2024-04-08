@@ -3,15 +3,6 @@ export default async function review({ name, id }: { name: string; id: string })
 
   const usersData = await result.json()
 
-  console.log('여기 값->' + usersData)
-
-  usersData.map((user: any) => {
-    console.log('Nickname:', user.nickname)
-    console.log('Content:', user.content)
-    console.log('year:', user.year)
-    console.log('month:', user.month)
-  })
-
   return (
     <div>
       <h3 className='font-bold text-2xl mt-10'>{name} 님에 대한 호스트 후기</h3>
