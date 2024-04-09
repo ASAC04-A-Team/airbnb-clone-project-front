@@ -7,7 +7,10 @@ interface IdParams {
 export default async function HomePage({ params: { id } }: IdParams) {
   const result = await fetch(`http://localhost:8080/api/home/${id}`)
   const inner = await result.json()
+<<<<<<< HEAD
+=======
 
+>>>>>>> c29d9c7f586f2f0691697f90f739c116f052317a
   let roomsData = inner.roomItem
 
   if (result.status === 501) {

@@ -29,7 +29,7 @@ interface Review {
   nation: string
 }
 
-export default function RoomIntroduction({
+export default async function RoomIntroduction({
   introduction,
   guestCapacity,
   bedCount,

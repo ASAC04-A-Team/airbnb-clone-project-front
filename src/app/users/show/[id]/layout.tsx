@@ -6,11 +6,9 @@ export const metadata: Metadata = {
 }
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en'>
-      <body>
-        <NavigationBar />
-        {children}
-      </body>
-    </html>
+    <div>
+      <NavigationBar />
+      {children}
+    </div>
   )
 }

@@ -42,12 +42,9 @@ export default function authinfo({ name }: { name: string }) {
           />
           <span className='text-center mr-20 '> 전화 번호</span>
         </div>
-        <a
-          href='#'
-          className='relative font-semibold underline text-gray-900 decoration-black bottom-[-30px]'
-        >
+        <p className='relative font-semibold underline text-gray-900 decoration-black bottom-[-30px]'>
           본인 인증 절차 자세히 알아보기
-        </a>
+        </p>
       </div>
     </div>
   )
