@@ -17,8 +17,9 @@ async function fetchReviewsData(id: string) {
       const emtiyArray: object[] = []
       return emtiyArray
     }
+    const inner = await result.json()
+    const reviewsData = inner
 
-    const reviewsData = await result.json()
     return reviewsData
   } catch (error) {
     console.error('리뷰가 없습니다.', error)
@@ -28,7 +29,8 @@ async function fetchReviewsData(id: string) {
 
 export default async function RoomDetailPage({ params: { id } }: IdParams) {
   const result = await fetch(`http://localhost:8080/api/room/roomDetail/${id}`)
-  const roomData = await result.json()
+  const inner = await result.json()
+  const roomData = inner.result
   const reviewsData = await fetchReviewsData(id)
 
   if (!roomData) {

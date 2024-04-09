@@ -4,6 +4,7 @@ import ReviewModal from '@/components/rooms/modal/reviewModal'
 import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
 import Image from 'next/image'
 import { useState } from 'react'
+import StarIcon from '/public/images/star.svg'
 
 interface Review {
   reviewId: number
@@ -46,22 +47,24 @@ export default function RoomReview({ reviews, id }: { reviews: Review[]; id: str
 
   const handleOpen = () => {
     setReviewModalOpen(!reviewModalOpen)
-    console.log(reviewModalOpen)
   }
 
   return (
     <>
-      <div className='py-12'>
+      <div className='py-5'>
         <div className='flex flex-col justify-between space-y-6 px-20 md:w-[800px] lg:w-[1250px]'>
-          <div className='mb-12 flex flex-col'>
+          <div className='mb-5 flex flex-col'>
             <div>
               <span className='text-[26px] font-semibold text-mainBlack'>
                 {`후기 ${reviews.length}개`}
               </span>
               {reviews.length > 2 ? (
-                <div className='mb-3'>{`평점: ⭐${avgScore}`}</div>
+                <div className='mb-3 mt-3 flex items-center gap-2'>
+                  평점: <StarIcon style={{ width: '16px', height: '16px' }} />
+                  {avgScore}
+                </div>
               ) : (
-                <div className='mb-3'>
+                <div className='mb-3 mt-3'>
                   <span className='text-[14px] text-mainGray'>
                     후기가 3개 이상이면 별점이 표시됩니다.
                   </span>
@@ -73,9 +76,9 @@ export default function RoomReview({ reviews, id }: { reviews: Review[]; id: str
                 initialReviews.map((eachReview, index) => (
                   <section
                     key={index}
-                    className='flex w-1/2 flex-col items-center md:h-[226px] lg:h-[226px] '
+                    className='flex w-1/2 flex-col items-center md:h-[226px] lg:h-[200px] '
                   >
-                    <div className='mb-2 ml-0 mr-auto flex md:w-[470px] lg:w-[470xpx]'>
+                    <div className='mb-2 mr-auto flex md:w-[470px] lg:w-[470xpx]'>
                       <div className='relative flex h-12 w-full'>
                         <div className='mr-[14px] h-full w-12'>
                           <div className='relative h-12 w-12'>
@@ -95,15 +98,15 @@ export default function RoomReview({ reviews, id }: { reviews: Review[]; id: str
                         </div>
                       </div>
                     </div>
-                    <div className='mb-1 ml-0 mr-auto flex items-center space-x-1'>
+                    <div className=' mr-auto flex items-center space-x-1'>
                       <StarRateGenerator score={eachReview.score} />
                     </div>
-                    <div className='ml-0 mr-auto overflow-hidden'>
+                    <div className=' mr-auto overflow-hidden'>
                       <p className='line-break-auto line-height-1.5 h-[72px] w-[450px] break-keep'>
                         {`${eachReview.content}`}
                       </p>
                     </div>
-                    <div className='ml-0 mr-auto mt-2'>
+                    <div className=' mr-auto'>
                       <button
                         onClick={() => {
                           handleOpen()
