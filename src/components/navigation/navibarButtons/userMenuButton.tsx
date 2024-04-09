@@ -20,9 +20,9 @@ import styles from '@/components/navigation/navibarButtons/styles.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ResponseCode, ResponseMessage } from '@/components/types'
-import { EmailCheckResponseDto } from '@/components/navigation/response/auth'
-import { EmailCheckRequestDto } from '@/components/navigation/request'
-import { emailCheckRequest } from '@/components/navigation'
+import { EmailCheckResponseDto } from '@/components/navigation/dto/response/auth'
+import { EmailCheckRequestDto } from '@/components/navigation/dto/request'
+import { emailCheckRequest } from '@/components/navigation/dto'
 
 // 연습
 

@@ -16,13 +16,16 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import ViewMore1 from '@/components/navigation/modal/viewMore1'
 import ViewMore2 from '@/components/navigation/modal/viewMore2'
-import { EmailAuthCodeRequestDto, EmailCheckRequestDto } from '@/components/navigation/request'
+import { EmailAuthCodeRequestDto, EmailCheckRequestDto } from '@/components/navigation/dto/request'
 import {
-  EmailAuthCodeResponseDto,
   EmailCheckResponseDto,
-} from '@/components/navigation/response/auth'
-import { emailAuthCodeRequest, emailCheckRequest } from '@/components/navigation'
-import { ResponseCode, ResponseMessage } from '@/components/types'
+  EmailAuthCodeResponseDto,
+  SignUpResponseDto,
+} from '@/components/navigation/dto/response/auth'
+import { emailAuthCodeRequest, emailCheckRequest, signUpRequest } from '@/components/navigation/dto'
+import { ResponseCode, ResponseMessage } from '@/components/types/enums'
+import SignUpRequestDto from '@/components/navigation/dto/request/sign-up.request.dto'
+import { ResponseBody } from '@/components/types'
 
 export default function SignUpButton() {
   const [checked, setChecked] = useState(false)
@@ -46,24 +49,24 @@ export default function SignUpButton() {
   // 먼저 회원가입에서 이메일, 비밀번호, 이메일 인증코드 부터 진행
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
-  const emailAuthCodeRef = useRef<HTMLInputElement | null>(null)
+  const certificationNumberRef = useRef<HTMLInputElement | null>(null)
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [emailAuthCode, setEmailAuthCode] = useState<string>('')
+  const [certificationNumber, setCertificationNumber] = useState<string>('')
 
   const [isEmailError, setEmailError] = useState<boolean>(false)
   const [isPasswordError, setPasswordError] = useState<boolean>(false)
-  const [isEmailAuthCodeError, setEmailAuthCodeError] = useState<boolean>(false)
+  const [isCertificationNumberError, setCertificationNumberError] = useState<boolean>(false)
 
   const [emailMessage, setEmailMessage] = useState<string>('')
   const [passwordMessage, setPasswordMessage] = useState<string>('')
-  const [emailAuthCodeMessage, setEmailAuthCodeMessage] = useState<string>('')
+  const [certificationMessage, setCertificationMessage] = useState<string>('')
 
   // 이메일 정규식
   const emailPattern = /^[a-zA-Z0-9]*@([-.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,4}$/
-  const [isEmailCheck, setEmailCheck] = useState<boolean>(false)
-  const [isEmailAuthCodeCheck, setEmailAuthCodeCheck] = useState<boolean>(false)
+  const [isEmailCheck, setEmailCheck] = useState<boolean>(false) // 이메일 중복 확인
+  const [isCertificationCheck, setCertificationCheck] = useState<boolean>(false) // 인증번호 확인
 
   // 이메일 메시지
   const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,14 +84,14 @@ export default function SignUpButton() {
   }
 
   // 이메일 인증 코드 메시지
-  const onEmailAuthCodeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const onCertificationChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    setEmailAuthCode(value)
-    setEmailAuthCodeMessage('')
+    setCertificationNumber(value)
+    setCertificationMessage('')
   }
 
   // 이메일 응답
-  /* const emailCheckResponse = (responseBody: ResponseMessage<EmailCheckResponseDto>) => {
+  const emailCheckResponse = (responseBody: ResponseBody<EmailCheckResponseDto>) => {
     if (!responseBody) return
     const { code } = responseBody
     if (code === ResponseCode.VALIDATION_FAIL) alert('이메일을 입력하세요.')
@@ -100,7 +103,7 @@ export default function SignUpButton() {
 
     if (code === ResponseCode.MAIL_FAIL) alert('이메일 전송에 실패했습니다')
     if (code === ResponseCode.DATABASE_ERROR) alert('DB 오류입니다')
-    if (code === ResponseCode.SUCCESS) return
+    if (code !== ResponseCode.SUCCESS) return
 
     setEmailError(false)
     setEmailMessage('사용 가능한 이메일입니다')
@@ -108,27 +111,38 @@ export default function SignUpButton() {
     setEmailCheck(true)
   }
 
-  // 이메일 인증 코드 응답
-  const emailAuthCodeResponse = (responseBody: ResponseBody<EmailAuthCodeResponseDto>) => {
+  const checkCertificationResponse = (responseBody: ResponseBody<EmailAuthCodeResponseDto>) => {
     if (!responseBody) return
     const { code } = responseBody
 
-    // 인증 코드 입력할 때 이메일을 입력하지 않으면
-    if (code === ResponseCode.VALIDATION_FAIL) alert('이메일을 입력하세요')
-
+    if (code === ResponseCode.VALIDATION_FAIL) alert('이메일, 인증번호를 입력해주세요')
     if (code === ResponseCode.EMAILAUTHCODE_FAIL) {
-      setEmailAuthCodeError(true)
-      setEmailAuthCodeMessage('인증번호가 일치하지 않습니다.')
-      setEmailAuthCodeCheck(false)
+      setCertificationNumberError(true)
+      setCertificationMessage('인증번호가 일치하지 않습니다')
+      setCertificationCheck(false)
     }
 
     if (code === ResponseCode.DATABASE_ERROR) alert('DB 오류입니다')
-    if (code === ResponseCode.SUCCESS) return
+    if (code !== ResponseCode.SUCCESS) return
 
-    setEmailAuthCodeError(false)
-    setEmailAuthCodeMessage('인증번호가 일치합니다..!!!!')
-    setEmailAuthCodeCheck(true)
-  } */
+    setCertificationNumberError(false)
+    setCertificationMessage('인증번호가 확인되었습니다')
+    setCertificationCheck(true)
+  }
+
+  const signUpResponse = (responseBody: ResponseBody<SignUpResponseDto>) => {
+    if (!responseBody) return
+    const { code } = responseBody
+    if (code === ResponseCode.VALIDATION_FAIL) alert('모든 값을 입력하세요')
+    if (code === ResponseCode.EMAILAUTHCODE_FAIL) {
+      setCertificationNumberError(true)
+      setCertificationMessage('인증번호가 일치하지 않습니다')
+      setCertificationCheck(false)
+    }
+
+    if (code === ResponseCode.DATABASE_ERROR) alert('DB 에러')
+    if (code !== ResponseCode.SUCCESS) return
+  }
 
   // 이메일 에러 메시지 (버튼 클릭 시) => 이메일만
   const onEmailButtonClickHandler = () => {
@@ -143,20 +157,40 @@ export default function SignUpButton() {
 
     const requestBody: EmailCheckRequestDto = { email }
 
-    // emailCheckRequest(requestBody).then(emailCheckResponse)
+    emailCheckRequest(requestBody).then(emailCheckResponse)
+
+    setEmailError(false)
+    setEmailMessage('이메일 전송 중입니다.....')
   }
 
-  const onPasswordButtonClickHandler = () => {}
+  const onPasswordButtonClickHandler = () => {
+    if (!password) {
+      setPasswordError(true)
+      setPasswordMessage('비밀번호를 입력해야 합니다.')
+      return
+    }
+
+    setEmailError(false)
+  }
 
   // 이메일, 인증 코드 에러 메시지 (버튼 클릭 시)
-  const onEmailAuthCodeButtonClickHandler = () => {
-    if (!email && !emailAuthCode) return
+  const onCertificationNumberButtonClickHandler = () => {
+    if (!email && !certificationNumber) return
 
-    const requestBody: EmailAuthCodeRequestDto = { email, emailAuthCode }
-    // emailAuthCodeRequest(requestBody).then(emailAuthCodeResponse)
+    const requestBody: EmailAuthCodeRequestDto = { email, certificationNumber }
+    emailAuthCodeRequest(requestBody).then(checkCertificationResponse)
   }
 
-  const onSignUpAndInButtonClickHandler = () => {}
+  const onSignUpAndInButtonClickHandler = () => {
+    if (!email && !password && !certificationNumber) return
+    if (!isCertificationCheck) {
+      alert('이메일 인증은 필수입니다')
+      return
+    }
+
+    const requestBody: SignUpRequestDto = { email, password, certificationNumber }
+    signUpRequest(requestBody).then(signUpResponse)
+  }
 
   // onKeyDown : 키를 눌렀을때 이벤트  (shift, alt, controll, capslock 등의 모든 키에 동작한다. 단 한영변환, 한자 등의 특수키는 인식 못한다).
   const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -171,10 +205,10 @@ export default function SignUpButton() {
     passwordRef.current.focus()
   }
 
-  const onEmailAuthCodeKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+  const onCertificationNumberKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
-    if (!emailAuthCodeRef.current) return
-    emailAuthCodeRef.current.focus()
+    if (!certificationNumberRef.current) return
+    certificationNumberRef.current.focus()
   }
 
   const [showPassword, setShowPassword] = React.useState(false)
@@ -315,21 +349,19 @@ export default function SignUpButton() {
               </div>
 
               <TextField
-                ref={emailAuthCodeRef}
+                ref={certificationNumberRef}
                 className='ml-8 mt-8 w-[650px]'
                 title='이메일 인증 코드'
                 placeholder='이메일 인증 코드 입력'
                 type='text'
-                value={emailAuthCode}
-                onChange={onEmailAuthCodeChangeHandler}
-                onClick={onEmailAuthCodeButtonClickHandler}
-                onKeyDown={onEmailAuthCodeKeyDownHandler}
-                error={isEmailAuthCodeError}
-                helperText={emailAuthCodeMessage}
+                value={certificationNumber}
+                onChange={onCertificationChangeHandler}
+                onClick={onCertificationNumberButtonClickHandler}
+                onKeyDown={onCertificationNumberKeyDownHandler}
+                error={isCertificationNumberError}
+                helperText={certificationMessage}
                 fullWidth
               />
-
-              <hr className='mt-8' />
 
               {/* 체크 박스 */}
               <div>

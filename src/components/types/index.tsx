@@ -1,4 +1,5 @@
-import ResponseCode from './enums/response-code'
-import ResponseMessage from './enums/response-message'
+import { ResponseDto } from '../navigation/dto/response'
 
-export { ResponseCode, ResponseMessage }
+type ResponseBody<T> = T | ResponseDto | null
+
+export type { ResponseBody }
