@@ -1,11 +1,11 @@
 export default async function review({ name, id }: { name: string; id: string }) {
   const result = await fetch(`http://localhost:8080/api/users/hostReview/${id}`)
-
-  const usersData = await result.json()
+  const inner = await result.json()
+  const usersData = inner.result
 
   return (
     <div>
-      <h3 className='font-bold text-2xl mt-10'>{name} 님에 대한 호스트 후기</h3>
+      <h3 className='mt-10 text-2xl font-bold'>{name} 님에 대한 호스트 후기</h3>
       <br />
       <div className='flex'>
         <div className='flex'>
@@ -13,7 +13,7 @@ export default async function review({ name, id }: { name: string; id: string })
           {usersData.map((userData: any, index: any) => (
             <span
               key={index}
-              className='block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow'
+              className='block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow'
               style={{ marginRight: '10px' }}
             >
               <h5 className='mb-2 text-base tracking-tight text-gray-900'>{userData.content}</h5>
@@ -27,14 +27,14 @@ export default async function review({ name, id }: { name: string; id: string })
       </div>
       <button
         type='button'
-        className='font-bold rounded-lg text-sm px-3 py-1.5 text-center me-2 mb-2 mt-5 border border-gray-800 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 '
+        className='mb-2 me-2 mt-5 rounded-lg border border-gray-800 px-3 py-1.5 text-center text-sm font-bold hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300 '
       >
         후기 표시하기
       </button>
       <br />
       <br />
       <hr />
-      <p className='relative font-semibold underline text-gray-900 decoration-black bottom-[-30px]'>
+      <p className='relative bottom-[-30px] font-semibold text-gray-900 underline decoration-black'>
         내가 작성한 후기
       </p>
     </div>

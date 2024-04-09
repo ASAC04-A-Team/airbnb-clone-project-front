@@ -2,16 +2,17 @@ import Image from 'next/image'
 
 export default async function information({ id }: { id: string }) {
   const result = await fetch(`http://localhost:8080/api/users/information/${id}`)
-  const userInformation = await result.json()
+  const inner = await result.json()
+  const userInformation = inner.result
 
   return (
-    <span className='relative block w-[342px] h-[240px] p-6 bg-white border border-gray-200 rounded-s-3xl rounded-e-3xl shadow-xl drop-shadow-lg  right-[-10px] '>
-      <div className='relative flex bottom-[-20px]'>
+    <div className='items-cneter  flex h-[240px] w-[342px] justify-center rounded-e-3xl rounded-s-3xl border border-gray-200 bg-white p-6 shadow-xl  drop-shadow-lg '>
+      <div className=' flex'>
         {/*flex  첫 번째 가로 칸 */}
-        <div className='w-2/3 mr-2 flex flex-col  items-center justify-center'>
+        <div className='mr-2 flex w-2/3 flex-col  items-center justify-center'>
           <div>
             <Image
-              className='w-[100px] h-[100px] rounded-full'
+              className='h-[100px] w-[100px] rounded-full'
               src={userInformation.profileImageUrl}
               alt='image description'
               width={120}
@@ -19,26 +20,24 @@ export default async function information({ id }: { id: string }) {
             />
           </div>
           <div>
-            <h2 className='relative text-3xl font-bold bottom-[-5px] '>
-              {userInformation.nickname}
-            </h2>
+            <h2 className=' text-3xl font-bold '>{userInformation.nickname}</h2>
           </div>
 
-          <h1 className='relative text-xs font-bold bottom-[-5px]'>
+          <h1 className=' text-xs font-bold'>
             {userInformation.isHost === true ? '호스트' : '게스트'}
           </h1>
         </div>
 
         {/*flex 두 번째 가로 칸 */}
-        <div className='w-1/3 ml-2 flex flex-col '>
+        <div className='ml-2 flex w-1/3 flex-col '>
           {/*flex 첫 번째 세로 칸 */}
-          <div className='h-1/2 mb-2'>
+          <div className='mb-2 h-1/2'>
             <h2 className='text-2xl'>{userInformation.reviewsNum}</h2>
             <p className='text-xs'>후기</p>
             <hr />
           </div>
           {/*flex 두 번째 세로 칸 */}
-          <div className='h-1/2 mb-4'>
+          <div className='mb-4 h-1/2'>
             <h2 className='text-2xl'>{userInformation.sinceRegistration}</h2>
             <p className='text-xs'>
               {userInformation.separator === 'month'
@@ -48,6 +47,6 @@ export default async function information({ id }: { id: string }) {
           </div>
         </div>
       </div>
-    </span>
+    </div>
   )
 }
