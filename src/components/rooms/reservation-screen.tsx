@@ -57,7 +57,7 @@ export default async function ReservationScreen({
   }
   return (
     <>
-      <div className='md:h-[1030px] md:w-[800px] lg:h-[1030px] lg:w-[1250px]'>
+      <div className='md:h-auto md:w-[800px] lg:h-auto lg:w-[1250px]'>
         <div className='relative flex px-20'>
           <div className='relative flex w-3/5'>
             <div className='w-full'>
