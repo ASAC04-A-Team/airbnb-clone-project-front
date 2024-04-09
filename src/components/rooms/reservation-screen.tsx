@@ -23,12 +23,30 @@ interface Room {
   guestPreference: boolean
 }
 
+interface Review {
+  reviewId: number
+  content: string
+  writeAt: string
+  reviewerName: string
+  reviewerProfileImageUrl: string
+  score: number
+  nation: string
+}
+
 interface ReviewTotalCount {
   reviewsCount: number
   reviewsAvg: number
 }
 
-export default async function ReservationScreen({ roomData, id }: { roomData: Room; id: string }) {
+export default async function ReservationScreen({
+  roomData,
+  id,
+  reviews,
+}: {
+  roomData: Room
+  id: string
+  reviews: Review[]
+}) {
   const result = await fetch(`http://localhost:8080/api/review/reviewsStatistic/${id}`)
   const inner = await result.json()
   const roomReviewTotal: ReviewTotalCount = inner
@@ -39,7 +57,7 @@ export default async function ReservationScreen({ roomData, id }: { roomData: Ro
   }
   return (
     <>
-      <div className='md:h-[1030px] lg:h-[1030px] md:w-[800px] lg:w-[1250px]'>
+      <div className='md:h-[1030px] md:w-[800px] lg:h-[1030px] lg:w-[1250px]'>
         <div className='relative flex px-20'>
           <div className='relative flex w-3/5'>
             <div className='w-full'>
@@ -50,6 +68,8 @@ export default async function ReservationScreen({ roomData, id }: { roomData: Ro
                 bedroomCount={roomData.bedroomCount}
                 bathroomCount={roomData.bathroomCount}
                 roomReviewTotal={roomReviewTotal}
+                reviews={reviews}
+                id={id}
               />
               <hr />
               <RoomHost id={id} />
