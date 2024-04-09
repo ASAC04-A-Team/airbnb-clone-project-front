@@ -69,6 +69,7 @@ export default async function ReservationScreen({
                 bathroomCount={roomData.bathroomCount}
                 roomReviewTotal={roomReviewTotal}
                 reviews={reviews}
+                id={id}
               />
               <hr />
               <RoomHost id={id} />

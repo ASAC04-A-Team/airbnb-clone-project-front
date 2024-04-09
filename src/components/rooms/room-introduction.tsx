@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import StarIcon from '/public/images/star.svg'
-import ReviewModal from '@/components/rooms/modal/review-modal'
+import ReviewModal from '@/components/rooms/modal/reviewModal'
 
 interface Props {
   introduction: string
@@ -11,6 +11,7 @@ interface Props {
   bathroomCount: number
   roomReviewTotal: ReviewTotalCount
   reviews: Review[]
+  id: string
 }
 
 interface ReviewTotalCount {
@@ -36,11 +37,11 @@ export default function RoomIntroduction({
   bathroomCount,
   roomReviewTotal,
   reviews,
+  id,
 }: Props) {
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
   const handleOpen = () => {
     setReviewModalOpen(!reviewModalOpen)
-    console.log(reviewModalOpen)
   }
   const result =
     roomReviewTotal.reviewsAvg === 50 ? (
@@ -82,6 +83,7 @@ export default function RoomIntroduction({
                 reviews={reviews}
                 reviewModalOpen={reviewModalOpen}
                 setReviewModalOpen={setReviewModalOpen}
+                id={id}
               />
             </div>
           </section>

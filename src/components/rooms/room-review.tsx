@@ -1,7 +1,6 @@
 'use client'
 
-import ReviewModal from '@/components/rooms/modal/review-modal'
-import FullStarIcon from '@/components/rooms/starIcon/full-star'
+import ReviewModal from '@/components/rooms/modal/reviewModal'
 import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -38,7 +37,7 @@ const getAvgScore = (reviews: Review[]): number => {
   return Math.round(avgScore * 10) / 10
 }
 
-export default function RoomReview({ reviews }: { reviews: Review[] }) {
+export default function RoomReview({ reviews, id }: { reviews: Review[]; id: string }) {
   const reviewExist = isReviewExist(reviews)
   const initialReviews = reviews.slice(0, 8)
   const avgScore = getAvgScore(reviews)
@@ -133,6 +132,7 @@ export default function RoomReview({ reviews }: { reviews: Review[] }) {
                 reviews={reviews}
                 reviewModalOpen={reviewModalOpen}
                 setReviewModalOpen={setReviewModalOpen}
+                id={id}
               />
             </div>
           </div>

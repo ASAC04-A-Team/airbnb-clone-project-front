@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import CloseIcon from '/public/svgIcons/closeIcon.svg'
@@ -11,10 +9,9 @@ import CheckIn from '/public/svgIcons/reviewModalSvgs/checkIn.svg'
 import Interaction from '/public/svgIcons/reviewModalSvgs/interaction.svg'
 import Location from '/public/svgIcons/reviewModalSvgs/location.svg'
 import Satisfication from '/public/svgIcons/reviewModalSvgs/satisfactionComparedToPrice.svg'
-import Search from '/public/svgIcons/reviewModalSvgs/search.svg'
-import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
-import Image from 'next/image'
-import DownIcon from '/public/svgIcons/reviewModalSvgs/down.svg'
+
+import ReviewSearch from '@/components/rooms/modal/reviewSearch'
+import ReviewModalSearchTitle from '@/components/rooms/modal/reviewSearchTitle'
 
 interface Review {
   reviewId: number
@@ -24,10 +21,6 @@ interface Review {
   reviewerProfileImageUrl: string
   score: number
   nation: string
-}
-
-const isReviewExist = (reviews: Review[]): boolean => {
-  return reviews.length > 0
 }
 
 const getAvgScore = (reviews: Review[]): number => {
@@ -76,21 +69,19 @@ export default function ReviewModal({
   reviews,
   reviewModalOpen,
   setReviewModalOpen,
+  id,
 }: {
   reviews: Review[]
   reviewModalOpen: boolean
   setReviewModalOpen: (newValue: boolean) => void
+  id: string
 }) {
   const handleClose = () => {
     setReviewModalOpen(false)
   }
 
-  const [onFocusButton, setOnFocusButton] = useState(false)
-  const [onClickSearchMenu, setOnClickSearchMenu] = useState(false)
-  const [selectedMenu, setSelectedMenu] = useState('최신순')
+  let selectedMenuOption = '최신순'
 
-  const reviewExist = isReviewExist(reviews)
-  const initialReviews = reviews.slice(0, 8)
   const avgScore = getAvgScore(reviews)
   const scorePersent = getScorePersent(reviews)
 
@@ -138,31 +129,31 @@ export default function ReviewModal({
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>5</span>
                     <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200 xl:w-full'>
-                      <div className={`h-1 w-[${scorePersent[0]}] bg-black`}></div>
+                      <div className={`h-1 bg-black`} style={{ width: scorePersent[0] }}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>4</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${scorePersent[1]}] bg-black`}></div>
+                      <div className={`h-1 bg-black`} style={{ width: scorePersent[1] }}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>3</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${scorePersent[2]}] bg-black`}></div>
+                      <div className={`h-1 bg-black`} style={{ width: scorePersent[2] }}></div>
                     </div>
                   </div>
                   <div className='flex items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>2</span>
                     <div className='ml-2  h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${scorePersent[3]}] bg-black`}></div>
+                      <div className={`h-1  bg-black`} style={{ width: scorePersent[3] }}></div>
                     </div>
                   </div>
                   <div className='flex flex-nowrap items-center'>
                     <span className='text-[10px] text-gray-500 xl:text-black'>1</span>
                     <div className='ml-2 h-1 w-[94px] max-w-xs rounded-xl bg-gray-200  xl:w-full'>
-                      <div className={`h-1 w-[${scorePersent[4]}] bg-black`}></div>
+                      <div className={`h-1 bg-black`} style={{ width: scorePersent[4] }}></div>
                     </div>
                   </div>
                 </div>
@@ -210,112 +201,10 @@ export default function ReviewModal({
             <div className='w-full flex-col items-center p-5 xl:w-[600px]'>
               <div className='flex h-[32px] w-full items-center justify-between '>
                 <div className='text-xl font-semibold'>{`후기 ${reviews.length}개`}</div>
-                <div className='relative'>
-                  <button
-                    className='flex h-[32px] w-auto items-center gap-2 rounded-2xl border bg-white px-3 font-semibold'
-                    onClick={() => {
-                      setOnClickSearchMenu(true)
-                    }}
-                    onFocus={() => {
-                      setOnFocusButton(true)
-                    }}
-                    onBlur={(e) => {
-                      if (!e.currentTarget.contains(e.relatedTarget) && !onClickSearchMenu) {
-                        setOnFocusButton(false)
-                      }
-                    }}
-                  >
-                    <p className=' text-xs'>{selectedMenu}</p>
-                    <DownIcon />
-                  </button>
-                  <div
-                    className={`absolute right-0 w-40 rounded-sm border bg-white ${onClickSearchMenu && onFocusButton ? 'scale-100' : 'scale-0'}`}
-                  >
-                    <ul>
-                      <li
-                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
-                        onClick={() => {
-                          setSelectedMenu('최신순')
-                          setOnClickSearchMenu(false)
-                        }}
-                      >
-                        최신순
-                      </li>
-                      <li
-                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
-                        onClick={() => {
-                          setSelectedMenu('높은 평점순')
-                          setOnClickSearchMenu(false)
-                        }}
-                      >
-                        높은 평점순
-                      </li>
-                      <li
-                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
-                        onClick={() => {
-                          setSelectedMenu('낮은 평점순')
-                          setOnClickSearchMenu(false)
-                        }}
-                      >
-                        낮은 평점순
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+
+                <ReviewModalSearchTitle selectedMenuOption={selectedMenuOption} />
               </div>
-
-              <form
-                // action={'http://localhost:8080/api/review/1'}
-                //method='get'
-                className='group mt-3 flex h-11 w-[98%] items-center rounded-3xl border border-mainGray px-4 focus-within:border-2'
-              >
-                <Search className=' flex-none' />
-
-                <input
-                  className='group ml-2 h-10  w-full text-base text-sm focus:outline-none'
-                  type='text'
-                  placeholder='후기 검색'
-                />
-              </form>
-
-              <div className='mt-6'>
-                {reviewExist ? (
-                  initialReviews.map((eachReview, index) => (
-                    <section key={index} className='mb-7 flex flex-col gap-3'>
-                      <div className='flex flex-row gap-3'>
-                        <div className='relative h-12 w-12'>
-                          <Image
-                            key={index}
-                            src={eachReview.reviewerProfileImageUrl}
-                            alt={`${index}. reviewer profileImage`}
-                            fill
-                            className='rounded-full object-cover'
-                          />
-                        </div>
-
-                        <div className='flex flex-col justify-center space-y-[2px]'>
-                          <div className='text-[16px] font-semibold text-mainBlack'>
-                            {`${eachReview.reviewerName}`}
-                          </div>
-                          <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className='flex items-center space-x-1'>
-                          <StarRateGenerator score={eachReview.score} />
-                        </div>
-                        <div className='mt-1 overflow-hidden'>
-                          <p className='line-break-auto line-height-1.5 break-keep'>
-                            {`${eachReview.content}`}
-                          </p>
-                        </div>
-                      </div>
-                    </section>
-                  ))
-                ) : (
-                  <div>리뷰가 없습니다.</div>
-                )}
-              </div>
+              <ReviewSearch reviews={reviews} id={id} selectedMenuOption={selectedMenuOption} />
             </div>
           </div>
         </Box>
