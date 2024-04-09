@@ -3,7 +3,11 @@ import Image from 'next/image'
 export default async function RoomHost({ id }: { id: string }) {
   const result = await fetch(` http://localhost:8080/api/room/roomHost/${id}`)
   const inner = await result.json()
-  const host = inner
+
+  if (inner.code !== 0) {
+    return <div>host가 없습니다.</div>
+  }
+  const host = inner.result
 
   if (result.status === 500) {
     return <div>host가 없습니다.</div>
@@ -14,14 +18,14 @@ export default async function RoomHost({ id }: { id: string }) {
       <div>
         <div className='py-6'>
           <section>
-            <div className='flex flex-start items-center'>
-              <div className='w-10 h-10 mr-6'>
-                <button className='relative w-full h-full'>
+            <div className='flex-start flex items-center'>
+              <div className='mr-6 h-10 w-10'>
+                <button className='relative h-full w-full'>
                   <Image
                     src={host.hostProfileImageUrl}
                     alt={'host profile image'}
                     fill
-                    className='object-contain rounded-full'
+                    className='rounded-full object-contain'
                   />
                 </button>
               </div>

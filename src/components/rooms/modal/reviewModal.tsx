@@ -42,25 +42,40 @@ const getScorePersent = (reviews: Review[]): string[] => {
   let threeReviewScore = 0
   let fourReviewScore = 0
   let fiveReviewScore = 0
-  for (const reviewscore of reviews) {
-    if (reviewscore.score === 1) {
-      oneReviewScore += 1
-    } else if (reviewscore.score === 2) {
-      twoReviewScore += 1
-    } else if (reviewscore.score === 3) {
-      threeReviewScore += 1
-    } else if (reviewscore.score === 4) {
-      fourReviewScore += 1
-    } else if (reviewscore.score === 5) {
-      fiveReviewScore += 1
-    }
-  }
 
-  const fiveScorePercent = `${(fiveReviewScore / reviews.length) * 100}%`
-  const fourScorePercent = `${(fourReviewScore / reviews.length) * 100}%`
-  const threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
-  const twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
-  const oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+  let fiveScorePercent = ``
+  let fourScorePercent = ``
+  let threeScorePercent = ``
+  let twoScorePercent = ``
+  let oneScorePercent = ``
+
+  if (reviews.length > 0) {
+    for (const reviewscore of reviews) {
+      if (reviewscore.score === 1) {
+        oneReviewScore += 1
+      } else if (reviewscore.score === 2) {
+        twoReviewScore += 1
+      } else if (reviewscore.score === 3) {
+        threeReviewScore += 1
+      } else if (reviewscore.score === 4) {
+        fourReviewScore += 1
+      } else if (reviewscore.score === 5) {
+        fiveReviewScore += 1
+      }
+    }
+
+    fiveScorePercent = `${(fiveReviewScore / reviews.length) * 100}%`
+    fourScorePercent = `${(fourReviewScore / reviews.length) * 100}%`
+    threeScorePercent = `${Math.round((threeReviewScore / reviews.length) * 100)}%`
+    twoScorePercent = `${Math.round((twoReviewScore / reviews.length) * 100)}%`
+    oneScorePercent = `${Math.round((oneReviewScore / reviews.length) * 100)}%`
+  } else {
+    fiveScorePercent = `0%`
+    fourScorePercent = `0%`
+    threeScorePercent = `0%`
+    twoScorePercent = `0%`
+    oneScorePercent = `0%`
+  }
 
   return [fiveScorePercent, fourScorePercent, threeScorePercent, twoScorePercent, oneScorePercent]
 }

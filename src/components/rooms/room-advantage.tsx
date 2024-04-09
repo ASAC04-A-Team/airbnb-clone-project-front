@@ -9,7 +9,7 @@ interface Advantage {
 export default async function RoomAdvantage({ id }: { id: string }) {
   const result = await fetch(` http://localhost:8080/api/room/roomAdvantage/${id}`)
   const inner = await result.json()
-  const advantages = inner
+  const advantages = inner.result
 
   const advantageExist = advantages.length > 0
   if (!advantageExist) {
@@ -23,14 +23,14 @@ export default async function RoomAdvantage({ id }: { id: string }) {
           <div className='flex flex-col justify-between space-y-6'>
             {advantages.map((eachAdvantage: Advantage, index: number) => (
               <section key={index} className='flex items-center'>
-                <div className='flex flex-start items-center'>
-                  <div className='w-10 h-10 mr-6'>
-                    <div className='relative w-full h-full'>
+                <div className='flex-start flex items-center'>
+                  <div className='mr-6 h-10 w-10'>
+                    <div className='relative h-full w-full'>
                       <Image
                         src={eachAdvantage.imageUrl}
                         alt={'advantages image'}
                         fill
-                        className='object-contain rounded-full'
+                        className='rounded-full object-contain'
                       />
                     </div>
                   </div>

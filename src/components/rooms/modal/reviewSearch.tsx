@@ -27,7 +27,6 @@ export default function ReviewSearch({
 }) {
   const reviewExist = isReviewExist(reviews)
   const initialReviews = reviews.slice(0, 8)
-  console.log(selectedMenuOption)
 
   return (
     <>
@@ -46,7 +45,7 @@ export default function ReviewSearch({
         />
       </form>
 
-      <iframe id='if' name='param' style={{ display: '' }}></iframe>
+      <iframe id='if' name='param' style={{ display: 'none' }}></iframe>
 
       <div className='mt-6'>
         {reviewExist ? (

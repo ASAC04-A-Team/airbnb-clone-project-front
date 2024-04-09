@@ -28,52 +28,58 @@ export default function Carousel({ roomImageUrls, id, guestPreference }: Props) 
     setHeart(!heart)
   }
   return (
-    <div className='overflow-hidden w-full h-full relative group'>
-      <Link
-        href={`/rooms/${id}`}
-        className='flex flex-row transition ease-out duration-40 w-full aspect-custom'
-        style={{
-          transform: `translateX(-${current * 100}%)`,
-        }}
-      >
-        {roomImageUrls.map((path, index) => {
-          return (
-            <img key={index} src={path} alt='' className='w-full h-auto rounded-lg object-cover' />
-          )
-        })}
+    <div className='group relative h-full w-full overflow-hidden'>
+      <Link href={`/rooms/${id}`} className='flex  w-full transition '>
+        <div
+          className='duration-40 flex w-full flex-row transition ease-out'
+          style={{
+            transform: `translateX(-${current * 100}%)`,
+          }}
+        >
+          {roomImageUrls.map((path, index) => {
+            return (
+              <img
+                key={index}
+                src={path}
+                alt=''
+                className='aspect-custom h-auto w-full rounded-lg object-cover'
+              />
+            )
+          })}
+        </div>
       </Link>
 
       <span
-        className={`bg-white rounded-full text-sm px-3 py-1 absolute top-3 left-3 ${guestPreference ? '' : 'hidden'}`}
+        className={`absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-sm ${guestPreference ? '' : 'hidden'}`}
       >
         게스트 선호
       </span>
       <button
-        className='absolute top-3 right-3  stroke-white stroke-1 hover:-translate-all hover:scale-110'
+        className='hover:-translate-all absolute right-3  top-3 stroke-white stroke-1 hover:scale-110'
         onClick={handleHeart}
       >
         <Like className={`${heart ? 'fill-mainColor' : ''}`} />
       </button>
       <button
-        className={`absolute top-1/2 left-3 p-2 rounded-full bg-transparent group-hover:bg-transparent-70 ${current === 0 ? 'hidden' : ''}`}
+        className={`absolute left-3 top-1/2 rounded-full bg-transparent p-2 group-hover:bg-transparent-70 ${current === 0 ? 'hidden' : ''}`}
         onClick={previousSlide}
       >
-        <LeftButtonIcon className='group-hover:text-black text-transparent' />
+        <LeftButtonIcon className='text-transparent group-hover:text-black' />
       </button>
       <button
-        className={`absolute top-1/2 right-3 p-2 rounded-full bg-transparent group-hover:bg-transparent-70 ${current === roomImageUrls.length - 1 ? 'hidden' : ''}`}
+        className={`absolute right-3 top-1/2 rounded-full bg-transparent p-2 group-hover:bg-transparent-70 ${current === roomImageUrls.length - 1 ? 'hidden' : ''}`}
         onClick={nextSlide}
       >
-        <RightButtonIcon className='group-hover:text-black text-transparent' />
+        <RightButtonIcon className='text-transparent group-hover:text-black' />
       </button>
 
-      <div className='absolute bottom-0 py-1 flex justify-center items-center gap-1 w-full'>
+      <div className='absolute bottom-0 flex w-full items-center justify-center gap-1 py-1'>
         {roomImageUrls.slice(Math.max(0, current - 2), current + 3).map((s, i) => {
           const index = i + Math.max(0, current - 2)
           return (
             <div
               key={'circle' + index}
-              className={`rounded-full ${index === current ? 'w-1.5 h-1.5' : 'w-1 h-1'} ${index === current ? 'bg-white' : 'bg-transparent-70'}`}
+              className={`rounded-full ${index === current ? 'h-1.5 w-1.5' : 'h-1 w-1'} ${index === current ? 'bg-white' : 'bg-transparent-70'}`}
             ></div>
           )
         })}

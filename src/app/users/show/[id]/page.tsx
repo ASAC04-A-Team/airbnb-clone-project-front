@@ -14,20 +14,24 @@ export default async function UserProfilePage({ params: { id } }: IdParams) {
   const usersData = await result.json()
 
   return (
-    <section className='relative flex top-[40px] flex-wrap left-[100px]'>
-      <div className='relative left-[200px] md:w-1/3 mb-4 md:mb-0'>
-        <Information id={id} />
+    <main className='flex h-full w-full  justify-center'>
+      <section className='mt-12 flex h-full w-10/12   justify-center gap-[70px]'>
+        <div className=' h-full w-auto flex-col items-center justify-center'>
+          <Information id={id} />
 
-        {usersData.isAuth === true ? (
-          <IsAuthinfo name={usersData.nickname} />
-        ) : (
-          <Authinfo name={usersData.nickname} />
-        )}
-      </div>
-      <div className='relative w-full md:w-2/3'>
-        <Introduction id={id} />
-        <Review name={usersData.nickname} id={id} />
-      </div>
-    </section>
+          {usersData.isAuth === true ? (
+            <IsAuthinfo name={usersData.nickname} />
+          ) : (
+            <Authinfo name={usersData.nickname} />
+          )}
+        </div>
+
+        <div className='w-[740px]'>
+          <Introduction id={id} />
+          <hr />
+          <Review name={usersData.nickname} id={id} />
+        </div>
+      </section>
+    </main>
   )
 }

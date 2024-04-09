@@ -10,12 +10,10 @@ export default async function HomePage({ params: { id } }: IdParams) {
 <<<<<<< HEAD
 =======
 
->>>>>>> c29d9c7f586f2f0691697f90f739c116f052317a
-  let roomsData = inner.roomItem
+  let roomsData = inner.result
 
   if (result.status === 501) {
     roomsData = []
-    console.log('카테고리에 해당하는 에러는 없습니다.')
     return <div>카테고리에 해당하는 에러가 없습니다.</div>
   }
 
