@@ -1,34 +1,37 @@
 import Authinfo from '@/components/profile/authinfo'
-import Identification from '@/components/profile/identification'
+import Information from '@/components/profile/information'
 import Introduction from '@/components/profile/introduction'
 import IsAuthinfo from '@/components/profile/isAuthinfo'
 import Review from '@/components/profile/review'
 //유저 버튼에 추가하기
 interface IdParams {
-  params: { id: number }
+  params: { id: string }
 }
 
 export default async function UserProfilePage({ params: { id } }: IdParams) {
-  // const result = await fetch(`http://localhost:3000/api/user/${id}`)
-  const result = await fetch(`http://localhost:8080/api/user/${id}`)
-  const inner = await result.json()
-  const usersData = JSON.parse(inner.data)
+  const result = await fetch(`http://localhost:8080/api/users/authInformation/${id}`)
+
+  const usersData = await result.json()
 
   return (
-    <section className='relative flex top-[40px] flex-wrap left-[100px] '>
-      <div className='relative left-[200px] md:w-1/3 mb-4 md:mb-0'>
-        <Identification name={usersData.name} />
+    <main className='flex h-full w-full  justify-center'>
+      <section className='mt-12 flex h-full w-10/12   justify-center gap-[70px]'>
+        <div className=' h-full w-auto flex-col items-center justify-center'>
+          <Information id={id} />
 
-        {usersData.isAuth === true ? (
-          <IsAuthinfo name={usersData.name} />
-        ) : (
-          <Authinfo name={usersData.name} />
-        )}
-      </div>
-      <div className='relative w-full md:w-2/3  '>
-        <Introduction name={usersData.name} />
-        <Review name={usersData.name} />
-      </div>
-    </section>
+          {usersData.isAuth === true ? (
+            <IsAuthinfo name={usersData.nickname} />
+          ) : (
+            <Authinfo name={usersData.nickname} />
+          )}
+        </div>
+
+        <div className='w-[740px]'>
+          <Introduction id={id} />
+          <hr />
+          <Review name={usersData.nickname} id={id} />
+        </div>
+      </section>
+    </main>
   )
 }

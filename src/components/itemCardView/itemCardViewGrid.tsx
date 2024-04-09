@@ -1,10 +1,9 @@
-'use client'
-import { useState, useEffect } from 'react'
 import ItemCardView from '@/components/itemCardView/itemCardView'
+import ItemSkelton from '@/app/(home)/itemsLoading'
 
-interface Room {
+interface roomItem {
   id: number
-  slides: string[]
+  roomImageUrls: string[]
   host: string
   guestPreference: boolean
   price: string
@@ -13,28 +12,27 @@ interface Room {
 }
 
 interface Props {
-  roomsData: Room[]
+  map: any
+  roomsData: roomItem[]
 }
 
-export default function ItemCardViewGrid({ roomsData }: Props) {
-  const itemsMap =
-    Array.isArray(roomsData) &&
-    roomsData.map((item: Room, index: number) => (
-      <ItemCardView
-        key={index}
-        slides={item.slides}
-        id={item.id}
-        host={item.host}
-        guestPreference={item.guestPreference}
-        price={item.price}
-        address={item.address}
-        nation={item.nation}
-      />
-    ))
+export default function ItemCardViewGrid({ roomsData }: { roomsData: Props }) {
+  const itemsView = roomsData.map((item: roomItem, index: number) => (
+    <ItemCardView
+      key={index}
+      roomImageUrls={item.roomImageUrls}
+      id={item.id}
+      host={item.host}
+      guestPreference={item.guestPreference}
+      price={item.price}
+      address={item.address}
+      nation={item.nation}
+    />
+  ))
 
   return (
-    <div className='w-11/12 h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6  auto-cols-max gap-x-1 sm:gap-x-2 md:gap-x-3 lg:gap-x-4 xl:gap-x-5 gap-y-1 sm:gap-y-2 md:gap-y-3 lg:gap-y-4 xl:gap-y-5 z-0'>
-      {itemsMap}
+    <div className='z-0 grid h-full w-11/12 auto-cols-max grid-cols-1 gap-x-1 gap-y-1 sm:grid-cols-2  sm:gap-x-2 sm:gap-y-2 md:grid-cols-3 md:gap-x-3 md:gap-y-3 lg:grid-cols-4 lg:gap-x-4 lg:gap-y-4 xl:grid-cols-5 xl:gap-x-5 xl:gap-y-5 2xl:grid-cols-6'>
+      {!roomsData ? <ItemSkelton /> : itemsView}
     </div>
   )
 }

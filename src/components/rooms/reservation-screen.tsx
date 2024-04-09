@@ -1,78 +1,84 @@
 import ReservationCard from '@/components/rooms/reservation-card'
 import RoomAdvantage from '@/components/rooms/room-advantage'
-import RoomAlbum from '@/components/rooms/room-album'
 import RoomComport from '@/components/rooms/room-comfort'
 import RoomDescription from '@/components/rooms/room-description'
 import RoomHost from '@/components/rooms/room-host'
 import RoomIntroduction from '@/components/rooms/room-introduction'
-import RoomTitle from '@/components/rooms/room-title'
-import Screen from '@/components/rooms/screen'
-
-interface Host {
-  name: string
-  profileImageUrl: string
-  career: string
-  isSuperHost: boolean
-  isAuth: boolean
-  responseRate: number
-  responseTime: string
-}
-
-interface RoomDetail {
-  bedroomCount: number
-  bedCount: number
-  bathroomCount: number
-}
-
-interface Advantage {
-  name: string
-  image: string
-}
-
-interface Comfort {
-  name: string
-  image: string
-}
 
 interface Room {
-  id: number
-  images: string[]
-  name: string
-  introduction: string
-  address: string
+  roomId: number
+  RoomName: string
+  roomImageUrls: string[]
   nation: string
-  description: string[]
-  host: Host
+  address: string
+  bathroomCount: number
+  bedroomCount: number
+  bedCount: number
+  capacity: number
+  reviewCount: number
+  hostName: String
+  introduction: string
   price: string
-  roomDetail: RoomDetail
+  description: string
   guestPreference: boolean
-  guestCapacity: number
-  advantages: Advantage[]
-  comforts: Comfort[]
-  checkIn: string
-  checkOut: string
 }
 
-export default function ReservationScreen({ roomData }: { roomData: Room }) {
+interface Review {
+  reviewId: number
+  content: string
+  writeAt: string
+  reviewerName: string
+  reviewerProfileImageUrl: string
+  score: number
+  nation: string
+}
+
+interface ReviewTotalCount {
+  reviewsCount: number
+  reviewsAvg: number
+}
+
+export default async function ReservationScreen({
+  roomData,
+  id,
+  reviews,
+}: {
+  roomData: Room
+  id: string
+  reviews: Review[]
+}) {
+  const result = await fetch(`http://localhost:8080/api/review/reviewsStatistic/${id}`)
+  const inner = await result.json()
+  const roomReviewTotal: ReviewTotalCount = inner
+
+  if (result.status === 500 || result.status === 404) {
+    roomReviewTotal.reviewsAvg = 50
+    roomReviewTotal.reviewsCount = 0
+  }
   return (
     <>
-      <div className='md:h-[1030px] lg:h-[1030px] md:w-[800px] lg:w-[1250px]'>
+      <div className='md:h-auto md:w-[800px] lg:h-auto lg:w-[1250px]'>
         <div className='relative flex px-20'>
           <div className='relative flex w-3/5'>
             <div className='w-full'>
               <RoomIntroduction
                 introduction={roomData.introduction}
-                guestCapacity={roomData.guestCapacity}
-                roomDetail={roomData.roomDetail}
+                guestCapacity={roomData.capacity}
+                bedCount={roomData.bedCount}
+                bedroomCount={roomData.bedroomCount}
+                bathroomCount={roomData.bathroomCount}
+                roomReviewTotal={roomReviewTotal}
+                reviews={reviews}
+                id={id}
               />
               <hr />
-              <RoomHost host={roomData.host} />
+              <RoomHost id={id} />
               <hr />
-              <RoomAdvantage advantages={roomData.advantages} />
+              <RoomAdvantage id={id} />
               <hr />
-              <RoomDescription />
+              <RoomDescription roomDescription={roomData.description} />
               <hr />
-              <RoomComport comforts={roomData.comforts}/>
+              <RoomComport id={id} />
               <hr />
             </div>
           </div>

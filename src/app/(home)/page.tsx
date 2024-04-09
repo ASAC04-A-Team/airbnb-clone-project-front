@@ -1,12 +1,13 @@
-import ScrollPage from '@/components/categroyScroll/scrollPage'
-import ItemCardPage from '@/components/itemCardView/itemCardPage'
-import SmNavibar from '@/components/navigation/navibarComponents/smNavibar'
-import NavigationBar from '@/components/navigation/navigation'
+import ItemCardViewGrid from '@/components/itemCardView/itemCardViewGrid'
 
 export default async function HomePage() {
+  const result = await fetch(`http://localhost:8080/api/home/1`)
+  const inner = await result.json()
+  const roomsData = inner.result
+
   return (
     <>
-      <ItemCardPage />
+      <ItemCardViewGrid roomsData={roomsData} />
     </>
   )
 }

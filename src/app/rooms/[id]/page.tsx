@@ -6,15 +6,16 @@ import RoomTitle from '@/components/rooms/room-title'
 import Screen from '@/components/rooms/screen'
 
 interface IdParams {
-  params: { id: number }
+  params: { id: string }
 }
 
-async function fetchReviewsData(id: number) {
+async function fetchReviewsData(id: string) {
   try {
-    // const result = await fetch(`http://localhost:3000/api/room/${id}/review`)
-    const result = await fetch(`http://localhost:8080/api/room/${id}/review`)
+    const result = await fetch(`http://localhost:3000/api/room/${id}/review`)
     const inner = await result.json()
-    return inner.data
+    const reviewsData = inner
+
+    return reviewsData
   } catch (error) {
     console.error('리뷰가 없습니다.', error)
     return []
@@ -22,11 +23,9 @@ async function fetchReviewsData(id: number) {
 }
 
 export default async function RoomDetailPage({ params: { id } }: IdParams) {
-  const result = await fetch(`http://localhost:8080/api/room/${id}`)
-  // const result = await fetch(`http://localhost:3000/api/room/${id}`)
+  const result = await fetch(`http://localhost:3000/api/room/${id}`)
   const inner = await result.json()
-  const roomData = inner.data
-
+  const roomData = inner.result
   const reviewsData = await fetchReviewsData(id)
 
   if (!roomData) {
@@ -44,16 +43,16 @@ export default async function RoomDetailPage({ params: { id } }: IdParams) {
       <main>
         <div className='flex flex-col'>
           <Screen>
-            <RoomTitle roomName={roomData.name} />
+            <RoomTitle roomName={roomData.roomName} />
           </Screen>
           <Screen>
-            <RoomAlbum images={roomData.images} />
+            <RoomAlbum images={roomData.roomImageUrls} />
           </Screen>
           <Screen>
-            <ReservationScreen roomData={roomData} />
+            <ReservationScreen roomData={roomData} id={id} reviews={reviewsData} />
           </Screen>
           <Screen>
-            <RoomReview reviews={reviewsData} />
+            <RoomReview reviews={reviewsData} id={id} />
           </Screen>
         </div>
       </main>

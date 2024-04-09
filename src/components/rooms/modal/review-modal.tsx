@@ -16,16 +16,13 @@ import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
 import Image from 'next/image'
 
 interface Review {
-  id: number
-  reviewer: {
-    name: string
-    profileImageUrl: string
-    address: string
-  }
+  reviewId: number
   content: string
-  date: string
-  roomId: number
+  writeAt: string
+  reviewerName: string
+  reviewerProfileImageUrl: string
   score: number
+  nation: string
 }
 
 const isReviewExist = (reviews: Review[]): boolean => {
@@ -72,7 +69,7 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
         onClick={handleOpen}
         className=' px-[23px] py-[13px] bg-white border-[1px] border-mainBlack rounded-lg'
       >
-        <span className='text-mainBlack text-[16px] font-semibold'>
+        <span className='text-mainBlack text-base font-semibold'>
           {`리뷰 ${reviews.length}개 모두 보기`}
         </span>
       </button>
@@ -239,7 +236,7 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
                         <div className='relative w-12 h-12'>
                           <Image
                             key={index}
-                            src={eachReview.reviewer.profileImageUrl}
+                            src={eachReview.reviewerProfileImageUrl}
                             alt={`${index}. reviewer profileImage`}
                             fill
                             className='object-cover rounded-full'
@@ -248,11 +245,9 @@ export default function ReviewModal({ reviews }: { reviews: Review[] }) {
                       </div>
                       <div className='flex flex-col justify-center space-y-[2px]'>
                         <div className='text-[16px] text-mainBlack font-semibold'>
-                          {`${eachReview.reviewer.name}`}
+                          {`${eachReview.reviewerName}`}
                         </div>
-                        <div className='text-[14px] text-mainGray'>
-                          {`${eachReview.reviewer.address}`}
-                        </div>
+                        <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
                       </div>
                     </div>
                     <div className='ml-0 mr-auto flex items-center mb-1 space-x-1'>
