@@ -2,15 +2,9 @@ import FitterButton from '@/components/categroyScroll/fillterButton'
 import HorizonScroll from '@/components/categroyScroll/horizonScroll'
 
 export default async function ScrollPage() {
-<<<<<<< HEAD
   // const result = await fetch(`http://localhost:3000/api/`)
-  const result = await fetch(`http://localhost:8080/api/category`)
-  const inner = await result.json()
-  const categroyIconData = inner.data
-=======
   const result = await fetch(`http://localhost:8080/api/category/`)
   const categoryIconData = await result.json()
->>>>>>> f8d02c30e3b25773693651781215da8e8ea97d2b
 
   return (
     <div className='flex flex-row items-center justify-center space-x-4 pb-3 pt-5 w-[91.16%] h-24'>

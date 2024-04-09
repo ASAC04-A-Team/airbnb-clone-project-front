@@ -7,7 +7,8 @@ export default function KakaoLogout() {
 
   const logoutParam = new URLSearchParams({
     client_id: KAKAO_API_KEY || ' ',
-    logout_redirect_uri: 'http://localhost:3000/',
+    // logout_redirect_uri: 'http://localhost:3000/',
+    logout_redirect_uri: 'http://localhost:8080/',
   })
 
   return (

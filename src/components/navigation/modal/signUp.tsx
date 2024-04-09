@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
@@ -16,6 +16,13 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import ViewMore1 from '@/components/navigation/modal/viewMore1'
 import ViewMore2 from '@/components/navigation/modal/viewMore2'
+import { EmailAuthCodeRequestDto, EmailCheckRequestDto } from '@/components/navigation/request'
+import {
+  EmailAuthCodeResponseDto,
+  EmailCheckResponseDto,
+} from '@/components/navigation/response/auth'
+import { emailAuthCodeRequest, emailCheckRequest } from '@/components/navigation'
+import { ResponseCode, ResponseMessage } from '@/components/types'
 
 export default function SignUpButton() {
   const [checked, setChecked] = useState(false)
@@ -36,19 +43,138 @@ export default function SignUpButton() {
     setOpen(false)
   }
 
-  const handleHangeulLastName = (event: { target: { value: any } }) => {
-    const inputLast = event.target.value
-    // 입력값이 한글인지 확인
-    if (/^[ㄱ-ㅎㅏ-ㅣ가-힣]*$/.test(inputLast)) {
-      setLastName(inputLast)
-    }
+  // 먼저 회원가입에서 이메일, 비밀번호, 이메일 인증코드 부터 진행
+  const emailRef = useRef<HTMLInputElement | null>(null)
+  const passwordRef = useRef<HTMLInputElement | null>(null)
+  const emailAuthCodeRef = useRef<HTMLInputElement | null>(null)
+
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [emailAuthCode, setEmailAuthCode] = useState<string>('')
+
+  const [isEmailError, setEmailError] = useState<boolean>(false)
+  const [isPasswordError, setPasswordError] = useState<boolean>(false)
+  const [isEmailAuthCodeError, setEmailAuthCodeError] = useState<boolean>(false)
+
+  const [emailMessage, setEmailMessage] = useState<string>('')
+  const [passwordMessage, setPasswordMessage] = useState<string>('')
+  const [emailAuthCodeMessage, setEmailAuthCodeMessage] = useState<string>('')
+
+  // 이메일 정규식
+  const emailPattern = /^[a-zA-Z0-9]*@([-.]?[a-zA-Z0-9])*\.[a-zA-Z]{2,4}$/
+  const [isEmailCheck, setEmailCheck] = useState<boolean>(false)
+  const [isEmailAuthCodeCheck, setEmailAuthCodeCheck] = useState<boolean>(false)
+
+  // 이메일 메시지
+  const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    setEmail(value)
+    setEmailMessage('')
+    setEmailCheck(false)
   }
-  const handleHangeulFirstName = (event: { target: { value: any } }) => {
-    const inputFirst = event.target.value
-    // 입력값이 한글인지 확인
-    if (/^[ㄱ-ㅎㅏ-ㅣ가-힣]*$/.test(inputFirst)) {
-      setFirstName(inputFirst)
+
+  // 비밀번호 메시지
+  const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    setPassword(value)
+    setPasswordMessage('')
+  }
+
+  // 이메일 인증 코드 메시지
+  const onEmailAuthCodeChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    setEmailAuthCode(value)
+    setEmailAuthCodeMessage('')
+  }
+
+  // 이메일 응답
+  /* const emailCheckResponse = (responseBody: ResponseMessage<EmailCheckResponseDto>) => {
+    if (!responseBody) return
+    const { code } = responseBody
+    if (code === ResponseCode.VALIDATION_FAIL) alert('이메일을 입력하세요.')
+    if (code === ResponseCode.DUPLICATE_EMAIL) {
+      setEmailError(true)
+      setEmailMessage('이미 사용 중인 이메일입니다')
+      setEmailCheck(false)
     }
+
+    if (code === ResponseCode.MAIL_FAIL) alert('이메일 전송에 실패했습니다')
+    if (code === ResponseCode.DATABASE_ERROR) alert('DB 오류입니다')
+    if (code === ResponseCode.SUCCESS) return
+
+    setEmailError(false)
+    setEmailMessage('사용 가능한 이메일입니다')
+    setEmailMessage('인증번호가 전송되었습니다.')
+    setEmailCheck(true)
+  }
+
+  // 이메일 인증 코드 응답
+  const emailAuthCodeResponse = (responseBody: ResponseBody<EmailAuthCodeResponseDto>) => {
+    if (!responseBody) return
+    const { code } = responseBody
+
+    // 인증 코드 입력할 때 이메일을 입력하지 않으면
+    if (code === ResponseCode.VALIDATION_FAIL) alert('이메일을 입력하세요')
+
+    if (code === ResponseCode.EMAILAUTHCODE_FAIL) {
+      setEmailAuthCodeError(true)
+      setEmailAuthCodeMessage('인증번호가 일치하지 않습니다.')
+      setEmailAuthCodeCheck(false)
+    }
+
+    if (code === ResponseCode.DATABASE_ERROR) alert('DB 오류입니다')
+    if (code === ResponseCode.SUCCESS) return
+
+    setEmailAuthCodeError(false)
+    setEmailAuthCodeMessage('인증번호가 일치합니다..!!!!')
+    setEmailAuthCodeCheck(true)
+  } */
+
+  // 이메일 에러 메시지 (버튼 클릭 시) => 이메일만
+  const onEmailButtonClickHandler = () => {
+    if (!email) return
+
+    const checkedEmail = emailPattern.test(email)
+    if (!checkedEmail) {
+      setEmailError(true)
+      setEmailMessage('이메일 형식이 아닙니다.')
+      return
+    }
+
+    const requestBody: EmailCheckRequestDto = { email }
+
+    // emailCheckRequest(requestBody).then(emailCheckResponse)
+  }
+
+  const onPasswordButtonClickHandler = () => {}
+
+  // 이메일, 인증 코드 에러 메시지 (버튼 클릭 시)
+  const onEmailAuthCodeButtonClickHandler = () => {
+    if (!email && !emailAuthCode) return
+
+    const requestBody: EmailAuthCodeRequestDto = { email, emailAuthCode }
+    // emailAuthCodeRequest(requestBody).then(emailAuthCodeResponse)
+  }
+
+  const onSignUpAndInButtonClickHandler = () => {}
+
+  // onKeyDown : 키를 눌렀을때 이벤트  (shift, alt, controll, capslock 등의 모든 키에 동작한다. 단 한영변환, 한자 등의 특수키는 인식 못한다).
+  const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    if (!emailRef.current) return
+    emailRef.current.focus()
+  }
+
+  const onPasswordKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    if (!passwordRef.current) return
+    passwordRef.current.focus()
+  }
+
+  const onEmailAuthCodeKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+    if (!emailAuthCodeRef.current) return
+    emailAuthCodeRef.current.focus()
   }
 
   const [showPassword, setShowPassword] = React.useState(false)
@@ -115,13 +241,13 @@ export default function SignUpButton() {
                 className='mt-10 ml-8 w-[650px]'
                 placeholder='이름(예: 길동)'
                 value={lastName}
-                onChange={handleHangeulLastName}
+                // onChange={handleHangeulLastName}
               ></TextField>
               <TextField
                 className='ml-8 w-[650px]'
                 placeholder='성(예: 홍)'
                 value={firstName}
-                onChange={handleHangeulFirstName}
+                // onChange={handleHangeulFirstName}
               />
 
               <Typography className='ml-8 w-[650px]'>
@@ -142,7 +268,21 @@ export default function SignUpButton() {
               </Typography>
 
               {/* 입력했던 이메일 값이 오도록 함(검증). 그리고 이메일 형식이 아니면 빨강으로 표시 */}
-              <TextField className='ml-8 mt-8 w-[650px]' placeholder='이메일'></TextField>
+              <TextField
+                ref={emailRef}
+                className='ml-8 mt-8 w-[650px]'
+                title='이메일'
+                placeholder='이메일 입력'
+                type='text'
+                value={email}
+                onChange={onEmailChangeHandler}
+                onClick={onEmailButtonClickHandler}
+                onKeyDown={onEmailKeyDownHandler}
+                error={isEmailError}
+                helperText={emailMessage}
+                fullWidth
+              />
+
               <Typography className='ml-8 w-[650px]'>
                 예약 확인과 영수증을 이메일로 보내드립니다.
               </Typography>
@@ -151,10 +291,14 @@ export default function SignUpButton() {
               <div className='divide-y-2 divide-gray-400 w-[740px] mt-4'>
                 <div>
                   <OutlinedInput
+                    ref={passwordRef}
                     className='ml-8 mt-8 w-[650px]'
                     placeholder='비밀번호'
                     type={showPassword ? 'text' : 'password'}
                     label='패스워드'
+                    onChange={onPasswordChangeHandler}
+                    onClick={onPasswordButtonClickHandler}
+                    onKeyDown={onPasswordKeyDownHandler}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
@@ -169,6 +313,22 @@ export default function SignUpButton() {
                   />
                 </div>
               </div>
+
+              <TextField
+                ref={emailAuthCodeRef}
+                className='ml-8 mt-8 w-[650px]'
+                title='이메일 인증 코드'
+                placeholder='이메일 인증 코드 입력'
+                type='text'
+                value={emailAuthCode}
+                onChange={onEmailAuthCodeChangeHandler}
+                onClick={onEmailAuthCodeButtonClickHandler}
+                onKeyDown={onEmailAuthCodeKeyDownHandler}
+                error={isEmailAuthCodeError}
+                helperText={emailAuthCodeMessage}
+                fullWidth
+              />
+
               <hr className='mt-8' />
 
               {/* 체크 박스 */}

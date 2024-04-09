@@ -9,8 +9,8 @@ interface IdParams {
 }
 
 export default async function UserProfilePage({ params: { id } }: IdParams) {
-  const result = await fetch(`http://localhost:3000/api/user/${id}`)
-  // const result = await fetch(`http://localhost:8080/api/user/${id}`)
+  // const result = await fetch(`http://localhost:3000/api/user/${id}`)
+  const result = await fetch(`http://localhost:8080/api/user/${id}`)
   const inner = await result.json()
   const usersData = JSON.parse(inner.data)
 
