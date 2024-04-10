@@ -29,7 +29,7 @@ interface Review {
   nation: string
 }
 
-export default async function RoomIntroduction({
+const RoomIntroduction = ({
   introduction,
   guestCapacity,
   bedCount,
@@ -38,11 +38,13 @@ export default async function RoomIntroduction({
   roomReviewTotal,
   reviews,
   id,
-}: Props) {
+}: Props) => {
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
+
   const handleOpen = () => {
     setReviewModalOpen(!reviewModalOpen)
   }
+
   const result =
     roomReviewTotal.reviewsAvg === 50 ? (
       <div>후기가 없습니다.</div>
@@ -56,11 +58,6 @@ export default async function RoomIntroduction({
         </button>
       </div>
     )
-
-  let openModal = false
-  const buttonHandler = () => {
-    !openModal
-  }
 
   return (
     <>
@@ -92,3 +89,5 @@ export default async function RoomIntroduction({
     </>
   )
 }
+
+export default RoomIntroduction

@@ -69,17 +69,17 @@ export default function HorizonScroll({ categoryList }: Props) {
   }
 
   return (
-    <div className=' h-20 flex w-full grow items-center relative'>
+    <div className=' relative flex h-20 w-full grow items-center'>
       {/* 왼쪽 버튼 */}
       <div
-        className={`h-20 w-[70px] flex items-center absolute left-0 ${
+        className={`absolute left-0 flex h-20 w-[70px] items-center ${
           scrollPosition === 0
             ? 'hidden'
             : 'bg-gradient-to-l from-transparent-70 from-10% via-white to-white'
         }`}
       >
         <button
-          className='flex items-center rounded-full border bg-white border-gray-300 p-2'
+          className='flex items-center rounded-full border border-gray-300 bg-white p-2'
           onClick={() => scroll(0)}
         >
           <LeftButtonIcon />
@@ -87,7 +87,7 @@ export default function HorizonScroll({ categoryList }: Props) {
       </div>
       {/* 스크롤 */}
       <div
-        className=' h-full scroll-smooth overflow-y-hidden overflow-x-hidden  flex items-center gap-x-8 grid-rows-1 grid-flow-col scroll-pr-10'
+        className=' flex h-full scroll-pr-10 grid-flow-col  grid-rows-1 items-center gap-x-8 overflow-x-hidden overflow-y-hidden scroll-smooth'
         ref={scrollRef}
       >
         {/* {listmap} */}
@@ -95,13 +95,13 @@ export default function HorizonScroll({ categoryList }: Props) {
 
       {/* 오른 버튼 */}
       <div
-        className={`h-20 w-[70px] flex flex-row-reverse items-center absolute right-0 ${
+        className={`absolute right-0 flex h-20 w-[70px] flex-row-reverse items-center ${
           scrollPosition === 1
             ? 'hidden'
             : 'bg-gradient-to-r from-transparent-70 from-10% via-white to-white'
         }`}
       >
-        <button className='border border-gray-300 rounded-full p-2' onClick={() => scroll(1)}>
+        <button className='rounded-full border border-gray-300 p-2' onClick={() => scroll(1)}>
           <RightButtonIcon />
         </button>
       </div>

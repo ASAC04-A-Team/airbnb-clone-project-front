@@ -35,8 +35,8 @@ export default function SignUpButton() {
   }) => {
     setChecked(event.target.checked)
   }
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  // const [firstName, setFirstName] = useState('')
+  // const [lastName, setLastName] = useState('')
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
@@ -160,7 +160,7 @@ export default function SignUpButton() {
     emailCheckRequest(requestBody).then(emailCheckResponse)
 
     setEmailError(false)
-    setEmailMessage('이메일 전송 중입니다.....')
+    setEmailMessage('사용 가능한 이메일입니다.')
   }
 
   const onPasswordButtonClickHandler = () => {
@@ -307,14 +307,8 @@ export default function SignUpButton() {
                   type='text'
                   className='ml-8 mt-10 w-[650px]'
                   placeholder='이름(예: 길동)'
-                  // onChange={handleHangeulLastName}
                 ></TextField>
-                <TextField
-                  type='text'
-                  className='ml-8 w-[650px]'
-                  placeholder='성(예: 홍)'
-                  // onChange={handleHangeulFirstName}
-                />
+                <TextField type='text' className='ml-8 w-[650px]' placeholder='성(예: 홍)' />
 
                 <Typography className='ml-8 w-[650px]'>
                   정부 발급 신분증에 표시된 이름과 일치하는지 확인하세요.

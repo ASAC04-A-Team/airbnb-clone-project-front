@@ -148,7 +148,7 @@ export default function UserMenuButton() {
     emailCheckRequest(requestBody).then(emailCheckResponse)
 
     setEmailError(false)
-    setEmailMessage('이메일 전송 중입니다.....')
+    setEmailMessage('사용 가능한 이메일입니다.')
   }
 
   const onPasswordButtonClickHandler = () => {
@@ -159,7 +159,6 @@ export default function UserMenuButton() {
     }
 
     setPasswordError(false)
-    setPasswordMessage('사용 가능한 비밀번호입니다')
   }
 
   // onKeyDown : 키를 눌렀을때 이벤트  (shift, alt, controll, capslock 등의 모든 키에 동작한다. 단 한영변환, 한자 등의 특수키는 인식 못한다).

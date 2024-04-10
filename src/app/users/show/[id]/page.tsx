@@ -11,7 +11,8 @@ interface IdParams {
 export default async function UserProfilePage({ params: { id } }: IdParams) {
   const result = await fetch(`http://localhost:8080/api/users/authInformation/${id}`)
 
-  const usersData = await result.json()
+  const inner = await result.json()
+  const usersData=inner.result
 
   return (
     <main className='flex h-full w-full  justify-center'>
