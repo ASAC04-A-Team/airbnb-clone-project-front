@@ -13,6 +13,11 @@ export default async function HomePage({ params: { id } }: IdParams) {
     return <div>카테고리에 해당하는 에러가 없습니다.</div>
   }
 
+  if (inner.code !== 0) {
+    roomsData = []
+    return <div>카테고리에 해당하는 에러가 없습니다.</div>
+  }
+
   if (result.status === 501) {
     roomsData = []
     return <div>카테고리에 해당하는 에러가 없습니다.</div>
