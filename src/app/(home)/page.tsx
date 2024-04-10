@@ -15,5 +15,10 @@ export default async function HomePage() {
     return <div>카테고리에 해당하는 에러가 없습니다.</div>
   }
 
-  return <>{/* <ItemCardViewGrid roomsData={roomsData} /> */}</>
+  return (
+    <>
+      {' '}
+      <ItemCardViewGrid roomsData={roomsData} />{' '}
+    </>
+  )
 }

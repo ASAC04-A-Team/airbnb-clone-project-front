@@ -198,20 +198,15 @@ export default function SignUpButton() {
     const email = emailRef.current?.value
     const password = passwordRef.current?.value
 
-    fetch('/api/users/signup', {
+    fetch('/api/users/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
     })
-    // .then((response) => {
-    //   if (response.ok) {
-    //   } else {
-    //   }
-    // })
-    // .catch((error) => {
-    // })
+      .then((response) => response.json())
+      .then((json) => console.log(json))
   }
 
   const onSignInOrSignUpButtonClick = () => {
