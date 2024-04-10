@@ -170,7 +170,8 @@ export default function SignUpButton() {
       return
     }
 
-    setEmailError(false)
+    setPasswordError(false)
+    setPasswordMessage('사용 가능한 비밀번호입니다')
   }
 
   // 이메일, 인증 코드 에러 메시지 (버튼 클릭 시)
@@ -181,7 +182,7 @@ export default function SignUpButton() {
     emailAuthCodeRequest(requestBody).then(checkCertificationResponse)
   }
 
-  const onSignUpAndInButtonClickHandler = () => {
+  const onSignUpButtonClickHandler = () => {
     if (!email && !password && !certificationNumber) return
     if (!isCertificationCheck) {
       alert('이메일 인증은 필수입니다')
@@ -190,6 +191,36 @@ export default function SignUpButton() {
 
     const requestBody: SignUpRequestDto = { email, password, certificationNumber }
     signUpRequest(requestBody).then(signUpResponse)
+  }
+
+  const onSignInButtonClickHandler = () => {
+    // 사용자가 입력한 로그인 정보 보내기
+    const email = emailRef.current?.value
+    const password = passwordRef.current?.value
+
+    fetch('/api/users/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+    // .then((response) => {
+    //   if (response.ok) {
+    //   } else {
+    //   }
+    // })
+    // .catch((error) => {
+    // })
+  }
+
+  const onSignInOrSignUpButtonClick = () => {
+    if (emailRef.current === null || passwordRef.current === null) {
+      handleOpen()
+    } else {
+      handleClose()
+      onSignInButtonClickHandler()
+    }
   }
 
   // onKeyDown : 키를 눌렀을때 이벤트  (shift, alt, controll, capslock 등의 모든 키에 동작한다. 단 한영변환, 한자 등의 특수키는 인식 못한다).
@@ -243,20 +274,20 @@ export default function SignUpButton() {
   return (
     <>
       <Button
-        onClick={handleOpen}
-        className='text-white bg-mainColor hover:bg-pink-700 mt-5 transition-transform duration-400 active:scale-90 border-solid border-black rounded-lg text-base font-bold w-full h-[48px]'
+        onClick={onSignInOrSignUpButtonClick}
+        className='duration-400 mt-5 h-[48px] w-full rounded-lg border-solid border-black bg-mainColor text-base font-bold text-white transition-transform hover:bg-pink-700 active:scale-90'
       >
         계속
       </Button>
 
       <Modal open={open} onClose={handleClose}>
         <Box
-          className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl
-           bg-white border-2 border-black shadow-lg p-16 w-[745px] h-[820px]'
+          className='relative left-1/2 top-1/2 h-[820px] w-[745px] -translate-x-1/2 -translate-y-1/2
+           transform rounded-2xl border-2 border-black bg-white p-16 shadow-lg'
         >
-          <div className='relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] rounded-lg p-8'>
-            <div className='divide-y-2 divide-gray-400 flex justify-center h-full items-center w-[800px]'>
-              <header className='flex flex-row items-center h-full mb-10 ml-7 relative w-full'>
+          <div className='relative left-1/2 top-1/2 w-[800px] -translate-x-1/2 -translate-y-1/2 transform rounded-lg p-8'>
+            <div className='flex h-full w-[800px] items-center justify-center divide-y-2 divide-gray-400'>
+              <header className='relative mb-10 ml-7 flex h-full w-full flex-row items-center'>
                 <Button onClick={handleClose}>
                   <Image
                     src='/svgIcons/leftAngle.svg'
@@ -266,169 +297,173 @@ export default function SignUpButton() {
                     className='absolute left-0'
                   />
                 </Button>
-                <div className='text-xl font-semibold absolute left-1/3'>회원 가입 완료하기</div>
+                <div className='absolute left-1/3 text-xl font-semibold'>회원 가입 완료하기</div>
               </header>
             </div>
             <hr className='text-mainGray' />
             <div className='max-h-[600px] overflow-y-auto overflow-x-hidden'>
-              <TextField
-                className='mt-10 ml-8 w-[650px]'
-                placeholder='이름(예: 길동)'
-                value={lastName}
-                // onChange={handleHangeulLastName}
-              ></TextField>
-              <TextField
-                className='ml-8 w-[650px]'
-                placeholder='성(예: 홍)'
-                value={firstName}
-                // onChange={handleHangeulFirstName}
-              />
+              <form action='/api/users/signup' method='post'>
+                <TextField
+                  type='text'
+                  className='ml-8 mt-10 w-[650px]'
+                  placeholder='이름(예: 길동)'
+                  // onChange={handleHangeulLastName}
+                ></TextField>
+                <TextField
+                  type='text'
+                  className='ml-8 w-[650px]'
+                  placeholder='성(예: 홍)'
+                  // onChange={handleHangeulFirstName}
+                />
 
-              <Typography className='ml-8 w-[650px]'>
-                정부 발급 신분증에 표시된 이름과 일치하는지 확인하세요.
-              </Typography>
+                <Typography className='ml-8 w-[650px]'>
+                  정부 발급 신분증에 표시된 이름과 일치하는지 확인하세요.
+                </Typography>
 
-              <input
-                type='date'
-                className='ml-8 mt-8 w-[650px] h-[60px] border border-slate-400 rounded-lg px-2 text-xl'
-                min='1900-01-01'
-                max={currentDate}
-                placeholder='연도-월-일'
-              />
+                <input
+                  type='date'
+                  className='ml-8 mt-8 h-[60px] w-[650px] rounded-lg border border-slate-400 px-2 text-xl'
+                  min='1900-01-01'
+                  max={currentDate}
+                  placeholder='연도-월-일'
+                />
 
-              <Typography className='ml-8 w-[650px]'>
-                18세 이상의 성인만 회원으로 가입할 수 있습니다. 생일은 에어비앤비의 다른 회원에게
-                공개되지 않습니다.
-              </Typography>
+                <Typography className='ml-8 w-[650px]'>
+                  18세 이상의 성인만 회원으로 가입할 수 있습니다. 생일은 에어비앤비의 다른 회원에게
+                  공개되지 않습니다.
+                </Typography>
 
-              {/* 입력했던 이메일 값이 오도록 함(검증). 그리고 이메일 형식이 아니면 빨강으로 표시 */}
-              <TextField
-                ref={emailRef}
-                className='ml-8 mt-8 w-[650px]'
-                title='이메일'
-                placeholder='이메일 입력'
-                type='text'
-                value={email}
-                onChange={onEmailChangeHandler}
-                onClick={onEmailButtonClickHandler}
-                onKeyDown={onEmailKeyDownHandler}
-                error={isEmailError}
-                helperText={emailMessage}
-                fullWidth
-              />
+                {/* 입력했던 이메일 값이 오도록 함(검증). 그리고 이메일 형식이 아니면 빨강으로 표시 */}
+                <TextField
+                  ref={emailRef}
+                  className='ml-8 mt-8 w-[650px]'
+                  title='이메일'
+                  placeholder='이메일 입력'
+                  type='text'
+                  value={email}
+                  onChange={onEmailChangeHandler}
+                  onClick={onEmailButtonClickHandler}
+                  onKeyDown={onEmailKeyDownHandler}
+                  error={isEmailError}
+                  helperText={emailMessage}
+                  fullWidth
+                />
 
-              <Typography className='ml-8 w-[650px]'>
-                예약 확인과 영수증을 이메일로 보내드립니다.
-              </Typography>
+                <Typography className='ml-8 w-[650px]'>
+                  예약 확인과 영수증을 이메일로 보내드립니다.
+                </Typography>
 
-              {/* 비밀번호 검증 필요*/}
-              <div className='divide-y-2 divide-gray-400 w-[740px] mt-4'>
+                {/* 비밀번호 검증 필요*/}
+                <div className='mt-4 w-[740px] divide-y-2 divide-gray-400'>
+                  <div>
+                    <OutlinedInput
+                      ref={passwordRef}
+                      className='ml-8 mt-8 w-[650px]'
+                      placeholder='비밀번호'
+                      type={showPassword ? 'text' : 'password'}
+                      label='패스워드'
+                      onChange={onPasswordChangeHandler}
+                      onClick={onPasswordButtonClickHandler}
+                      onKeyDown={onPasswordKeyDownHandler}
+                      endAdornment={
+                        <InputAdornment position='end'>
+                          <IconButton
+                            aria-label='toggle password visibility'
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </div>
+                </div>
+
+                <TextField
+                  ref={certificationNumberRef}
+                  className='ml-8 mt-8 w-[650px]'
+                  title='이메일 인증 코드'
+                  placeholder='이메일 인증 코드 입력'
+                  type='text'
+                  value={certificationNumber}
+                  onChange={onCertificationChangeHandler}
+                  onClick={onCertificationNumberButtonClickHandler}
+                  onKeyDown={onCertificationNumberKeyDownHandler}
+                  error={isCertificationNumberError}
+                  helperText={certificationMessage}
+                  fullWidth
+                />
+
+                {/* 체크 박스 */}
                 <div>
-                  <OutlinedInput
-                    ref={passwordRef}
-                    className='ml-8 mt-8 w-[650px]'
-                    placeholder='비밀번호'
-                    type={showPassword ? 'text' : 'password'}
-                    label='패스워드'
-                    onChange={onPasswordChangeHandler}
-                    onClick={onPasswordButtonClickHandler}
-                    onKeyDown={onPasswordKeyDownHandler}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
+                  <FormControlLabel
+                    control={<Checkbox color='primary' onChange={handleCheckboxChange} />}
+                    label={
+                      <>
+                        개인 정보 수집 및 이용에 동의합니다.
+                        <br />
+                        1. 에어비앤비가 수집하는 개인 정보 에어비앤비 플랫폼을 이용하는 데 필요한
+                        정보
+                        <br />
+                        당사는 회원님이 에어비앤비 플랫폼을 이용할 때 회원님의 개인 정보를
+                        수집합니다.
+                        <br />
+                        그렇지 않은 경우, 에어비앤비는 요청하신 서비스를 회원님께 제공하지 못할 수
+                        있습니다.
+                        <br />
+                        이러한 정보에는 다음이 포함됩니다.
+                      </>
                     }
+                    labelPlacement='start'
+                    className='ml-7 mt-4 w-[670px] justify-between'
                   />
+
+                  {/* 추가 모달 */}
+                  <div className='ml-5'>
+                    <ViewMore1 />
+                  </div>
                 </div>
-              </div>
 
-              <TextField
-                ref={certificationNumberRef}
-                className='ml-8 mt-8 w-[650px]'
-                title='이메일 인증 코드'
-                placeholder='이메일 인증 코드 입력'
-                type='text'
-                value={certificationNumber}
-                onChange={onCertificationChangeHandler}
-                onClick={onCertificationNumberButtonClickHandler}
-                onKeyDown={onCertificationNumberKeyDownHandler}
-                error={isCertificationNumberError}
-                helperText={certificationMessage}
-                fullWidth
-              />
+                {/* 체크 박스 */}
+                <div>
+                  <FormControlLabel
+                    control={<Checkbox color='primary' onChange={handleCheckboxChange} />}
+                    label={
+                      <>
+                        마케팅 이메일 수신을 원합니다( 선택).
+                        <br />
+                        에어비앤비 회원 전용 할인, 추천 여행 정보, 마케팅 이메일, 푸시 알림을
+                        보내드립니다.
+                        <br />
+                        계정 설정 또는 마케팅 알림에서 언제든지 수신을 거부할 수 있습니다.
+                      </>
+                    }
+                    labelPlacement='start'
+                    className='ml-7 mt-4 w-[670px] justify-between'
+                  />
 
-              {/* 체크 박스 */}
-              <div>
-                <FormControlLabel
-                  control={<Checkbox color='primary' onChange={handleCheckboxChange} />}
-                  label={
-                    <>
-                      개인 정보 수집 및 이용에 동의합니다.
-                      <br />
-                      1. 에어비앤비가 수집하는 개인 정보 에어비앤비 플랫폼을 이용하는 데 필요한 정보
-                      <br />
-                      당사는 회원님이 에어비앤비 플랫폼을 이용할 때 회원님의 개인 정보를 수집합니다.
-                      <br />
-                      그렇지 않은 경우, 에어비앤비는 요청하신 서비스를 회원님께 제공하지 못할 수
-                      있습니다.
-                      <br />
-                      이러한 정보에는 다음이 포함됩니다.
-                    </>
-                  }
-                  labelPlacement='start'
-                  className='w-[670px] mt-4 ml-7 justify-between'
-                />
-
-                {/* 추가 모달 */}
-                <div className='ml-5'>
-                  <ViewMore1 />
+                  {/* 추가 모달 */}
+                  <div className='ml-5'>
+                    <ViewMore2 />
+                  </div>
                 </div>
-              </div>
+                <hr />
 
-              {/* 체크 박스 */}
-              <div>
-                <FormControlLabel
-                  control={<Checkbox color='primary' onChange={handleCheckboxChange} />}
-                  label={
-                    <>
-                      마케팅 이메일 수신을 원합니다( 선택).
-                      <br />
-                      에어비앤비 회원 전용 할인, 추천 여행 정보, 마케팅 이메일, 푸시 알림을
-                      보내드립니다.
-                      <br />
-                      계정 설정 또는 마케팅 알림에서 언제든지 수신을 거부할 수 있습니다.
-                    </>
-                  }
-                  labelPlacement='start'
-                  className='w-[670px] mt-4 ml-7 justify-between'
-                />
+                <Typography className='ml-5 mt-8'>
+                  동의 및 계속하기를 선택하여 에어비앤비 서비스 약관, 결제 서비스 약관,
+                  위치기반서비스 이용약관, 차별 금지 정책, 개인정보 처리방침에 동의합니다.
+                </Typography>
 
-                {/* 추가 모달 */}
-                <div className='ml-5'>
-                  <ViewMore2 />
-                </div>
-              </div>
-              <hr />
-
-              <Typography className='mt-8 ml-5'>
-                동의 및 계속하기를 선택하여 에어비앤비 서비스 약관, 결제 서비스 약관, 위치기반서비스
-                이용약관, 차별 금지 정책, 개인정보 처리방침에 동의합니다.
-              </Typography>
-
-              <Button
-                onClick={handleOpen}
-                className='text-white bg-pink-700 hover:bg-pink-700 mt-5 ml-8 
-                transition-transform duration-400 active:scale-90 border-solid border-black 
-                rounded-lg text-2xl font-bold w-[670px] h-[60px]'
-              >
-                동의 및 계속하기
-              </Button>
+                <Button
+                  onClick={onSignUpButtonClickHandler}
+                  className='duration-400 ml-8 mt-5 h-[60px] w-[670px] 
+                rounded-lg border-solid border-black bg-pink-700 text-2xl 
+                font-bold text-white transition-transform hover:bg-pink-700 active:scale-90'
+                >
+                  동의 및 계속하기
+                </Button>
+              </form>
             </div>
           </div>
         </Box>

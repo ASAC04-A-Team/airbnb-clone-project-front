@@ -1,4 +1,4 @@
-import ItemCardViewGrid from '@/components/itemCardView/itemCardViewGrid'
+// import ItemCardViewGrid from '@/components/itemCardView/itemCardViewGrid'
 
 interface IdParams {
   params: { id: number }
@@ -7,8 +7,6 @@ interface IdParams {
 export default async function HomePage({ params: { id } }: IdParams) {
   const result = await fetch(`http://localhost:8080/api/home/${id}`)
   const inner = await result.json()
-<<<<<<< HEAD
-=======
 
   let roomsData = inner.result
 
@@ -19,7 +17,7 @@ export default async function HomePage({ params: { id } }: IdParams) {
 
   return (
     <>
-      <ItemCardViewGrid roomsData={roomsData} />
+      {/* <ItemCardViewGrid roomsData={roomsData} /> */}
     </>
   )
 }

@@ -24,7 +24,7 @@ const DOMAIN = 'http://localhost:3000/api'
 
 const EMAIL_CHECK_URL = () => `${DOMAIN}/users/email-check`
 const EMAILAUTHCODE_URL = () => `${DOMAIN}/users/email-auth-code`
-const SIGN_UP_URL = () => `${DOMAIN}/users/sign-up`
+const SIGN_UP_URL = () => `${DOMAIN}/users/signup`
 
 // 이메일 체크 요청
 export const emailCheckRequest = async (requestBody: EmailCheckRequestDto) => {

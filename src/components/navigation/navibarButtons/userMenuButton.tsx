@@ -19,10 +19,11 @@ import SignUpButton from '@/components/navigation/modal/signUp'
 import styles from '@/components/navigation/navibarButtons/styles.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ResponseCode, ResponseMessage } from '@/components/types'
+import { ResponseCode } from '@/components/types/enums'
 import { EmailCheckResponseDto } from '@/components/navigation/dto/response/auth'
 import { EmailCheckRequestDto } from '@/components/navigation/dto/request'
 import { emailCheckRequest } from '@/components/navigation/dto'
+import { ResponseBody } from '@/components/types'
 
 // 연습
 
@@ -81,11 +82,6 @@ export default function UserMenuButton() {
     setEmail(value)
   }
 
-  // 폰 로그인 방식 선택
-  const selectPhoneLogin = () => {
-    setSelectLogin('phone')
-  }
-
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
@@ -105,19 +101,19 @@ export default function UserMenuButton() {
   // 이메일 메시지
   const onEmailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    handleInputChange
     setEmail(value)
+    setEmailMessage('')
+    setEmailCheck(false)
   }
 
   // 비밀번호 메시지
   const onPasswordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    handleInputChange
     setPassword(value)
+    setPasswordMessage('')
   }
 
-  // 이메일 응답
-  /* const emailCheckResponse = (responseBody: ResponseMessage<EmailCheckResponseDto>) => {
+  const emailCheckResponse = (responseBody: ResponseBody<EmailCheckResponseDto>) => {
     if (!responseBody) return
     const { code } = responseBody
     if (code === ResponseCode.VALIDATION_FAIL) alert('이메일을 입력하세요.')
@@ -129,13 +125,12 @@ export default function UserMenuButton() {
 
     if (code === ResponseCode.MAIL_FAIL) alert('이메일 전송에 실패했습니다')
     if (code === ResponseCode.DATABASE_ERROR) alert('DB 오류입니다')
-    if (code === ResponseCode.SUCCESS) return
+    if (code !== ResponseCode.SUCCESS) return
 
     setEmailError(false)
     setEmailMessage('사용 가능한 이메일입니다')
-    setEmailMessage('인증번호가 전송되었습니다.')
     setEmailCheck(true)
-  } */
+  }
 
   // 이메일 에러 메시지 (버튼 클릭 시) => 이메일만
   const onEmailButtonClickHandler = () => {
@@ -150,10 +145,22 @@ export default function UserMenuButton() {
 
     const requestBody: EmailCheckRequestDto = { email }
 
-    // emailCheckRequest(requestBody).then(emailCheckResponse)
+    emailCheckRequest(requestBody).then(emailCheckResponse)
+
+    setEmailError(false)
+    setEmailMessage('이메일 전송 중입니다.....')
   }
 
-  const onPasswordButtonClickHandler = () => {}
+  const onPasswordButtonClickHandler = () => {
+    if (!password) {
+      setPasswordError(true)
+      setPasswordMessage('비밀번호를 입력해야 합니다.')
+      return
+    }
+
+    setPasswordError(false)
+    setPasswordMessage('사용 가능한 비밀번호입니다')
+  }
 
   // onKeyDown : 키를 눌렀을때 이벤트  (shift, alt, controll, capslock 등의 모든 키에 동작한다. 단 한영변환, 한자 등의 특수키는 인식 못한다).
   const onEmailKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -167,12 +174,35 @@ export default function UserMenuButton() {
     onSignInButtonClickHandler()
   }
 
-  const onSignInButtonClickHandler = () => {}
+  const onSignInButtonClickHandler = () => {
+    // 사용자가 입력한 로그인 정보 보내기
+    const email = emailRef.current?.value
+    const password = passwordRef.current?.value
+
+    fetch('/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        // 서버 응답 처리
+        if (response.ok) {
+          // 회원가입 성공 시 처리
+        } else {
+          // 회원가입 실패 시 처리
+        }
+      })
+      .catch((error) => {
+        // 오류 처리
+      })
+  }
 
   return (
     <div>
       <button
-        className={`ml-2 h-[48px] w-[86px] items-center flex flex-row border border-gray-300 rounded-full text-black ${open ? 'shadow-xl' : ''} hover:shadow-lg`}
+        className={`ml-2 flex h-[48px] w-[86px] flex-row items-center rounded-full border border-gray-300 text-black ${open ? 'shadow-xl' : ''} hover:shadow-lg`}
         id='basic-button'
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup='true'
@@ -180,8 +210,8 @@ export default function UserMenuButton() {
         onClick={handleClick}
       >
         <MenuIcon className='ml-3 mr-3' />
-        <div className='w-8 h-8'>
-          <UserIcon className='w-8 h-8' />
+        <div className='h-8 w-8'>
+          <UserIcon className='h-8 w-8' />
         </div>
       </button>
       <Menu
@@ -241,9 +271,9 @@ export default function UserMenuButton() {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
-        <Box className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white border-black shadow-lg w-[745px] h-[820px]'>
+        <Box className='absolute left-1/2 top-1/2 h-[820px] w-[745px] -translate-x-1/2 -translate-y-1/2 transform rounded-2xl border-black bg-white shadow-lg'>
           {/* 제목 + X버튼 영역 */}
-          <div className='p-6 relative w-[745px] flex flex-row'>
+          <div className='relative flex w-[745px] flex-row p-6'>
             <Button className='justify-start border-none text-black' onClick={closeModalHandler}>
               <Image
                 src='/svgIcons/closeIcon.svg'
@@ -253,7 +283,7 @@ export default function UserMenuButton() {
                 className='block h-4 w-4 overflow-visible'
               />
             </Button>
-            <Typography className='text-lg text-nowrap absolute left-1/3 ml-9 font-semibold'>
+            <Typography className='absolute left-1/3 ml-9 text-nowrap text-lg font-semibold'>
               로그인 또는 회원가입
             </Typography>
           </div>
@@ -265,7 +295,7 @@ export default function UserMenuButton() {
             <div className='text-2xl font-semibold'>에어비앤비에 오신 것을 환영합니다.</div>
             <br />
 
-            <form name='frm' action='/practiceLoginAndSignUp' method='post'>
+            <form action='/api/users/login' method='post'>
               <TextField
                 select
                 label='국가/지역'
@@ -293,12 +323,14 @@ export default function UserMenuButton() {
                   <TextField
                     ref={emailRef}
                     title='이메일'
-                    aria-required='true'
                     placeholder='이메일 입력'
-                    value={value}
-                    onChange={handleInputChange}
+                    type='text'
+                    value={email}
+                    onChange={onEmailChangeHandler}
                     onClick={onEmailButtonClickHandler}
                     onKeyDown={onEmailKeyDownHandler}
+                    error={isEmailError}
+                    helperText={emailMessage}
                     fullWidth
                   />
                   <TextField
@@ -310,8 +342,8 @@ export default function UserMenuButton() {
                     onChange={onPasswordChangeHandler}
                     onClick={onPasswordButtonClickHandler}
                     onKeyDown={onPasswordKeyDownHandler}
-                    // isErrorMessage={isPasswordError}
-                    // message={passwordMessage}
+                    error={isPasswordError}
+                    helperText={passwordMessage}
                     fullWidth
                   />
                 </>
@@ -321,7 +353,7 @@ export default function UserMenuButton() {
                 <span className='text-base'>
                   전화나 문자로 전화번호를 확인하겠습니다. 일반 문자 메시지 요금 및 데이터 요금이
                   부과됩니다.{' '}
-                  <span className='underline text-black font-bold text-base break-words'>
+                  <span className='break-words text-base font-bold text-black underline'>
                     개인정보
                     <br />
                     처리방침
@@ -336,7 +368,7 @@ export default function UserMenuButton() {
             <Typography className={styles.hrSect}>
               <span className='text-sm text-mainGray'>또는</span>
             </Typography>
-            <div className='relative text-black flex flex-row items-center justify-center  border border-solid border-black rounded-lg text-sm font-bold w-full h-[48px]'>
+            <div className='relative flex h-[48px] w-full flex-row items-center  justify-center rounded-lg border border-solid border-black text-sm font-bold text-black'>
               <Image
                 src='/images/kakaoLogin.png'
                 alt='KakaoLogin'
@@ -347,8 +379,8 @@ export default function UserMenuButton() {
               <KakaoLogin KakaoLocation='카카오 로그인' /> {/**카카오 로그인하기 */}
             </div>
             <Button
-              className='relative text-black flex flex-row items-center justify-center mt-5 border border-solid
-               border-black rounded-lg text-sm font-bold w-full h-[48px]'
+              className='relative mt-5 flex h-[48px] w-full flex-row items-center justify-center rounded-lg
+               border border-solid border-black text-sm font-bold text-black'
               onClick={selectLoginMethod}
             >
               <Image
