@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import CloseIcon from '/public/svgIcons/closeIcon.svg'
@@ -9,9 +10,11 @@ import CheckIn from '/public/svgIcons/reviewModalSvgs/checkIn.svg'
 import Interaction from '/public/svgIcons/reviewModalSvgs/interaction.svg'
 import Location from '/public/svgIcons/reviewModalSvgs/location.svg'
 import Satisfication from '/public/svgIcons/reviewModalSvgs/satisfactionComparedToPrice.svg'
-
-import ReviewSearch from '@/components/rooms/modal/reviewSearch'
-import ReviewModalSearchTitle from '@/components/rooms/modal/reviewSearchTitle'
+import DownIcon from '/public/svgIcons/reviewModalSvgs/down.svg'
+import Search from '/public/svgIcons/reviewModalSvgs/search.svg'
+import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
+import Image from 'next/image'
+import { Content } from 'next/font/google'
 
 interface Review {
   reviewId: number
@@ -21,6 +24,10 @@ interface Review {
   reviewerProfileImageUrl: string
   score: number
   nation: string
+}
+
+const isReviewExist = (reviews: Review[]): boolean => {
+  return reviews.length > 0
 }
 
 const getAvgScore = (reviews: Review[]): number => {
@@ -95,10 +102,40 @@ export default function ReviewModal({
     setReviewModalOpen(false)
   }
 
-  let selectedMenuOption = '최신순'
+  const reviewExist = isReviewExist(reviews)
+  const initialReviews = reviews.slice(0, 8)
 
+  const [onFocusButton, setOnFocusButton] = useState(false)
+  const [onClickSearchMenu, setOnClickSearchMenu] = useState(false)
+  const [selectedMenu, setSelectedMenu] = useState('최신순')
+  const [content, setContent] = useState('')
   const avgScore = getAvgScore(reviews)
   const scorePersent = getScorePersent(reviews)
+
+  // const http = require('http')
+
+  // http
+  //   .createServer((req: any, res: any) => {
+  //     res.writeHead(200, {
+  //       'Access-Control-Allow-Origin': '*', // 모든 출처 허용
+  //       // 특정 출처만 허용하려면 '*' 대신 'http://example.com'과 같이 설정
+  //     })
+  //     res.end('CORS policy enabled')
+  //   })
+  //   .listen(8080)
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault() // 폼 제출 기본 동작 방지
+    const formData = new FormData(event.target) // 폼 데이터 수집
+
+    // GET 요청 대신 POST 요청 사용
+    const response = await fetch(`http://localhost:8080/api/review/reviewSearch/${id}`, {
+      method: 'POST', // GET -> POST로 변경
+      body: formData,
+    })
+    const result = await response.json() // 서버 응답 처리
+    console.log(result)
+  }
 
   return (
     <>
@@ -217,9 +254,117 @@ export default function ReviewModal({
               <div className='flex h-[32px] w-full items-center justify-between '>
                 <div className='text-xl font-semibold'>{`후기 ${reviews.length}개`}</div>
 
-                <ReviewModalSearchTitle selectedMenuOption={selectedMenuOption} />
+                <div className='relative'>
+                  <button
+                    className='flex h-[32px] w-auto items-center gap-2 rounded-2xl border bg-white px-3 font-semibold'
+                    onClick={() => {
+                      setOnClickSearchMenu(true)
+                    }}
+                    onFocus={() => {
+                      setOnFocusButton(true)
+                    }}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget) && !onClickSearchMenu) {
+                        setOnFocusButton(false)
+                      }
+                    }}
+                  >
+                    <p className=' text-xs'>{selectedMenu}</p>
+                    <DownIcon />
+                  </button>
+                  <div
+                    className={`absolute right-0 w-40 rounded-sm border bg-white ${onClickSearchMenu && onFocusButton ? 'scale-100' : 'scale-0'}`}
+                  >
+                    <ul>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('최신순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        최신순
+                      </li>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('높은 평점순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        높은 평점순
+                      </li>
+                      <li
+                        className='h-10 w-40 p-3 hover:bg-navigatorOneLayoutColor'
+                        onClick={() => {
+                          setSelectedMenu('낮은 평점순')
+                          setOnClickSearchMenu(false)
+                        }}
+                      >
+                        낮은 평점순
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <ReviewSearch reviews={reviews} id={id} selectedMenuOption={selectedMenuOption} />
+              <form
+                onSubmit={handleSubmit}
+                target='param'
+                className='group mt-3 flex h-11 w-[98%] items-center rounded-3xl border border-mainGray px-4 focus-within:border-2'
+              >
+                <Search className=' flex-none' />
+
+                <input
+                  className='group ml-2 h-10  w-full text-base text-sm focus:outline-none'
+                  type='text'
+                  value={content}
+                  onChange={(event) => {
+                    setContent(event.target.value)
+                  }}
+                  placeholder='후기 검색'
+                />
+              </form>
+
+              <iframe id='if' name='param' style={{ display: 'none' }}></iframe>
+
+              <div className='mt-6'>
+                {reviewExist ? (
+                  initialReviews.map((eachReview, index) => (
+                    <section key={index} className='mb-7 flex flex-col gap-3'>
+                      <div className='flex flex-row gap-3'>
+                        <div className='relative h-12 w-12'>
+                          <Image
+                            key={index}
+                            src={eachReview.reviewerProfileImageUrl}
+                            alt={`${index}. reviewer profileImage`}
+                            fill
+                            className='rounded-full object-cover'
+                          />
+                        </div>
+
+                        <div className='flex flex-col justify-center space-y-[2px]'>
+                          <div className='text-[16px] font-semibold text-mainBlack'>
+                            {`${eachReview.reviewerName}`}
+                          </div>
+                          <div className='text-[14px] text-mainGray'>{`${eachReview.nation}`}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className='flex items-center space-x-1'>
+                          <StarRateGenerator score={eachReview.score} />
+                        </div>
+                        <div className='mt-1 overflow-hidden'>
+                          <p className='line-break-auto line-height-1.5 break-keep'>
+                            {`${eachReview.content}`}
+                          </p>
+                        </div>
+                      </div>
+                    </section>
+                  ))
+                ) : (
+                  <div>리뷰가 없습니다.</div>
+                )}
+              </div>
             </div>
           </div>
         </Box>
