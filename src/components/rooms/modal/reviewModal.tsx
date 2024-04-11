@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import CloseIcon from '/public/svgIcons/closeIcon.svg'
@@ -14,7 +14,7 @@ import DownIcon from '/public/svgIcons/reviewModalSvgs/down.svg'
 import Search from '/public/svgIcons/reviewModalSvgs/search.svg'
 import StarRateGenerator from '@/components/rooms/starIcon/starRateGenerator'
 import Image from 'next/image'
-import { Content } from 'next/font/google'
+import { Anybody, Content } from 'next/font/google'
 
 interface Review {
   reviewId: number
@@ -103,40 +103,39 @@ export default function ReviewModal({
   }
 
   const reviewExist = isReviewExist(reviews)
-  const initialReviews = reviews.slice(0, 8)
+  let initialReviews = reviews.slice(0, 8)
 
   const [onFocusButton, setOnFocusButton] = useState(false)
   const [onClickSearchMenu, setOnClickSearchMenu] = useState(false)
   const [selectedMenu, setSelectedMenu] = useState('최신순')
   const [content, setContent] = useState('')
+  const [resultResponse, setResultResponse] = useState([])
   const avgScore = getAvgScore(reviews)
   const scorePersent = getScorePersent(reviews)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // const http = require('http')
-
-  // http
-  //   .createServer((req: any, res: any) => {
-  //     res.writeHead(200, {
-  //       'Access-Control-Allow-Origin': '*', // 모든 출처 허용
-  //       // 특정 출처만 허용하려면 '*' 대신 'http://example.com'과 같이 설정
-  //     })
-  //     res.end('CORS policy enabled')
-  //   })
-  //   .listen(8080)
+  const inputRef = useRef(null)
 
   const handleSubmit = async (event: any) => {
-    event.preventDefault() // 폼 제출 기본 동작 방지
-    const formData = new FormData(event.target) // 폼 데이터 수집
+    event.preventDefault()
 
-    // GET 요청 대신 POST 요청 사용
-    const response = await fetch(`http://localhost:8080/api/review/reviewSearch/${id}`, {
-      method: 'POST', // GET -> POST로 변경
+    const formData = new FormData(event.target)
+
+    const response = await fetch(`http://localhost:3000/api/room/${id}/review`, {
+      method: 'POST',
       body: formData,
     })
-    const result = await response.json() // 서버 응답 처리
-    console.log(result)
+
+    setIsSubmitted(true)
+
+    const result = await response.json()
+    const inner = result
+    setResultResponse(inner.data)
   }
 
+  if (isSubmitted) {
+    initialReviews = resultResponse
+  }
   return (
     <>
       <Modal open={reviewModalOpen} onClose={handleClose}>
@@ -317,6 +316,9 @@ export default function ReviewModal({
                 <input
                   className='group ml-2 h-10  w-full text-base text-sm focus:outline-none'
                   type='text'
+                  id='content'
+                  name='content'
+                  ref={inputRef}
                   value={content}
                   onChange={(event) => {
                     setContent(event.target.value)
@@ -325,7 +327,7 @@ export default function ReviewModal({
                 />
               </form>
 
-              <iframe id='if' name='param' style={{ display: 'none' }}></iframe>
+              {/* <iframe id='if' name='param' style={{ display: 'none' }}></iframe> */}
 
               <div className='mt-6'>
                 {reviewExist ? (
