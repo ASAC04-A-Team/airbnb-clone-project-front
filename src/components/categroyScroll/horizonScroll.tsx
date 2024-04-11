@@ -29,16 +29,16 @@ export default function HorizonScroll({ categoryList }: Props) {
     }
   }, [pathname])
 
-  // const listmap = categoryList.map((listIndex) => (
-  //   <ScrollCardView
-  //     key={listIndex.categoryId}
-  //     iconId={listIndex.categoryId}
-  //     iconPath={listIndex.imageUrl}
-  //     iconName={listIndex.name}
-  //     selectedIconId={selectedIconId}
-  //     onSelectIcon={setSelectedIconId}
-  //   />
-  // ))
+  const listmap = categoryList.map((listIndex) => (
+    <ScrollCardView
+      key={listIndex.categoryId}
+      iconId={listIndex.categoryId}
+      iconPath={listIndex.imageUrl}
+      iconName={listIndex.name}
+      selectedIconId={selectedIconId}
+      onSelectIcon={setSelectedIconId}
+    />
+  ))
 
   const scroll = (plusMinus: number) => {
     if (scrollRef.current) {
@@ -90,7 +90,7 @@ export default function HorizonScroll({ categoryList }: Props) {
         className=' flex h-full scroll-pr-10 grid-flow-col  grid-rows-1 items-center gap-x-8 overflow-x-hidden overflow-y-hidden scroll-smooth'
         ref={scrollRef}
       >
-        {/* {listmap} */}
+        {listmap}
       </div>
 
       {/* 오른 버튼 */}

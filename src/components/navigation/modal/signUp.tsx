@@ -213,7 +213,6 @@ export default function SignUpButton() {
     if (emailRef.current === null || passwordRef.current === null) {
       handleOpen()
     } else {
-      handleClose()
       onSignInButtonClickHandler()
     }
   }

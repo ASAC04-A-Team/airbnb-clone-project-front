@@ -6,8 +6,7 @@ import { isNull } from 'lodash'
 
 const KAKAO_API_KEY = process.env.NEXT_PUBLIC_API_KEY
 const client_id = KAKAO_API_KEY || ''
-// const redirect_uri = 'http://localhost:3000/kakaoLogin'
-const redirect_uri = 'http://localhost:8080/kakaoLogin'
+const redirect_uri = 'http://localhost:3000/kakaoLogin'
 const response_type = 'code'
 
 interface KakaoLoginProps {
@@ -59,7 +58,7 @@ export default function KakaoLogin({ KakaoLocation }: KakaoLoginProps) {
   return (
     <div className={`${KakaoLocation === '카카오 로그인' ? 'w-auto' : 'w-full'}`}>
       {KakaoLocation === '카카오 로그인' ? (
-        <Button className='text-black text-sm font-bold w-full' onClick={handleLoginClick}>
+        <Button className='w-full text-sm font-bold text-black' onClick={handleLoginClick}>
           카카오로 로그인하기
         </Button>
       ) : (

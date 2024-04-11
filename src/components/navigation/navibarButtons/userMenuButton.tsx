@@ -170,15 +170,15 @@ export default function UserMenuButton() {
 
   const onPasswordKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
-    onSignInButtonClickHandler()
+    // onSignInButtonClickHandler()
   }
 
-  const onSignInButtonClickHandler = () => {
+  /* const onSignInButtonClickHandler = () => {
     // 사용자가 입력한 로그인 정보 보내기
     const email = emailRef.current?.value
     const password = passwordRef.current?.value
 
-    fetch('/api/signup', {
+    fetch('/api/users/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function UserMenuButton() {
       .catch((error) => {
         // 오류 처리
       })
-  }
+  } */
 
   return (
     <div>
